@@ -6,11 +6,18 @@ CREATE TABLE "problems" (
                             "created_at" timestamp
 );
 
+CREATE TABLE "tests" (
+                         "id" integer PRIMARY KEY,
+                         "problem_id" integer,
+                         "input" text,
+                         "output" text
+);
+
 CREATE TABLE "solutions" (
                              "id" integer PRIMARY KEY,
                              "user_id" integer,
                              "problem_id" integer,
-                            "created_at" timestamp,
+                             "created_at" timestamp,
                              "code" text,
                              "grade" integer
 );
@@ -55,4 +62,4 @@ ALTER TABLE "problem_ratings" ADD FOREIGN KEY ("problem_id") REFERENCES "problem
 
 ALTER TABLE "problem_ratings" ADD FOREIGN KEY ("tag_id") REFERENCES "tags" ("id");
 
-drop table solutions
+ALTER TABLE "tests" ADD FOREIGN KEY ("problem_id") REFERENCES "problems" ("id");
