@@ -3,6 +3,7 @@ package com.algonet.algonetapi.services;
 import com.algonet.algonetapi.Models.dto.UserCreationDTO;
 import com.algonet.algonetapi.Models.dto.UserLoginDTO;
 import com.algonet.algonetapi.Models.entities.User;
+import com.algonet.algonetapi.exceptions.InexistantUserException;
 import com.algonet.algonetapi.exceptions.WrongAuthException;
 import com.algonet.algonetapi.repositories.UserRepository;
 import com.algonet.algonetapi.utils.JwtUtil;
@@ -38,5 +39,12 @@ public class AuthService {
             return JwtUtil.generateToken(userLoginDTO.getUsername());
         else
             throw new WrongAuthException();
+    }
+
+    public User getUserByUsername(String username) {
+        Optional<User> optionalUser = userRepository.findByUsername(username);
+        if(optionalUser.isEmpty())
+            throw new InexistantUserException();
+        return optionalUser.get();
     }
 }
