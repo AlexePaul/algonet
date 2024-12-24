@@ -1,6 +1,7 @@
 package com.algonet.algonetapi.controllers.advice;
 
 import com.algonet.algonetapi.exceptions.AlreadyExistingUserException;
+import com.algonet.algonetapi.exceptions.InexistantTagException;
 import com.algonet.algonetapi.exceptions.WrongAuthException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -22,5 +23,11 @@ public class CustomControllerAdvice {
     public ResponseEntity<?> unauthorized() {
         log.error("Bad Authentication");
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+    }
+
+    @ExceptionHandler(InexistantTagException.class)
+    public ResponseEntity<?> bad_request(){
+        log.error("Inexistant Tag");
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
     }
 }

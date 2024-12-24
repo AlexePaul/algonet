@@ -1,6 +1,6 @@
 package com.algonet.algonetapi.controllers;
 
-import com.algonet.algonetapi.Models.dto.ProblemTestCreationDTO;
+import com.algonet.algonetapi.Models.dto.problemDTOs.ProblemTestCreationDTO;
 import com.algonet.algonetapi.Models.entities.Problem;
 import com.algonet.algonetapi.services.ProblemService;
 import lombok.AllArgsConstructor;

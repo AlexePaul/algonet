@@ -1,7 +1,7 @@
 package com.algonet.algonetapi.services;
 
-import com.algonet.algonetapi.Models.dto.ProblemCreationDTO;
-import com.algonet.algonetapi.Models.dto.TestCreationDTO;
+import com.algonet.algonetapi.Models.dto.problemDTOs.ProblemCreationDTO;
+import com.algonet.algonetapi.Models.dto.testDTOs.TestCreationDTO;
 import com.algonet.algonetapi.Models.entities.Problem;
 import com.algonet.algonetapi.Models.entities.Test;
 import com.algonet.algonetapi.repositories.ProblemRepository;

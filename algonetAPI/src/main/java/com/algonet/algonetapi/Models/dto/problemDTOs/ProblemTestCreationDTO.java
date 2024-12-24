@@ -1,5 +1,6 @@
-package com.algonet.algonetapi.Models.dto;
+package com.algonet.algonetapi.Models.dto.problemDTOs;
 
+import com.algonet.algonetapi.Models.dto.testDTOs.TestCreationDTO;
 import lombok.Getter;
 import lombok.Setter;
 

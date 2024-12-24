@@ -1,4 +1,4 @@
-package com.algonet.algonetapi.Models.dto;
+package com.algonet.algonetapi.Models.dto.userDTOs;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -7,8 +7,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @Getter
 @Setter
-public class UserCreationDTO {
+public class UserLoginDTO {
     private String username;
     private String password;
-    private String email;
 }

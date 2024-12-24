@@ -1,7 +1,7 @@
 package com.algonet.algonetapi.services;
 
-import com.algonet.algonetapi.Models.dto.UserCreationDTO;
-import com.algonet.algonetapi.Models.dto.UserLoginDTO;
+import com.algonet.algonetapi.Models.dto.userDTOs.UserCreationDTO;
+import com.algonet.algonetapi.Models.dto.userDTOs.UserLoginDTO;
 import com.algonet.algonetapi.Models.entities.User;
 import com.algonet.algonetapi.exceptions.InexistantUserException;
 import com.algonet.algonetapi.exceptions.WrongAuthException;
