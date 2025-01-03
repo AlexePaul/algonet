@@ -1,8 +1,9 @@
 package com.algonet.algonetapi.services;
 
-import com.algonet.algonetapi.Models.dto.userDTOs.UserCreationDTO;
-import com.algonet.algonetapi.Models.dto.userDTOs.UserLoginDTO;
-import com.algonet.algonetapi.Models.entities.User;
+import com.algonet.algonetapi.models.dto.userDTOs.UserCreationDTO;
+import com.algonet.algonetapi.models.dto.userDTOs.UserLoginDTO;
+import com.algonet.algonetapi.models.entities.User;
+import com.algonet.algonetapi.exceptions.AlreadyExistingUserException;
 import com.algonet.algonetapi.exceptions.NotFoundException;
 import com.algonet.algonetapi.exceptions.WrongAuthException;
 import com.algonet.algonetapi.repositories.UserRepository;
@@ -22,6 +23,8 @@ public class AuthService {
     private final UserRepository userRepository;
 
     public User register(UserCreationDTO userCreationDTO) {
+        if(userRepository.findByUsername(userCreationDTO.getUsername()).isPresent())
+            throw new AlreadyExistingUserException();
         User newUser = new User();
         BeanUtils.copyProperties(userCreationDTO, newUser);
         newUser.setPassword(PasswordUtil.hashPassword(newUser.getPassword()));

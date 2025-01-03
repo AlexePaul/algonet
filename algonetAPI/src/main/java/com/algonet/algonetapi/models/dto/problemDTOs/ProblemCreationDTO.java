@@ -1,4 +1,4 @@
-package com.algonet.algonetapi.Models.dto.problemDTOs;
+package com.algonet.algonetapi.models.dto.problemDTOs;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

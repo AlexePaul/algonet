@@ -1,8 +1,8 @@
 package com.algonet.algonetapi.services;
 
-import com.algonet.algonetapi.Models.dto.problemDTOs.ProblemCreationDTO;
-import com.algonet.algonetapi.Models.dto.problemDTOs.ProblemPatchDTO;
-import com.algonet.algonetapi.Models.entities.Problem;
+import com.algonet.algonetapi.models.dto.problemDTOs.ProblemCreationDTO;
+import com.algonet.algonetapi.models.dto.problemDTOs.ProblemPatchDTO;
+import com.algonet.algonetapi.models.entities.Problem;
 import com.algonet.algonetapi.exceptions.NotFoundException;
 import com.algonet.algonetapi.repositories.ProblemRepository;
 import lombok.AllArgsConstructor;

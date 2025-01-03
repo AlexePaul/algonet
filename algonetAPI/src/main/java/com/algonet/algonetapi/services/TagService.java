@@ -1,6 +1,6 @@
 package com.algonet.algonetapi.services;
 
-import com.algonet.algonetapi.Models.entities.Tag;
+import com.algonet.algonetapi.models.entities.Tag;
 import com.algonet.algonetapi.exceptions.NotFoundException;
 import com.algonet.algonetapi.repositories.TagRepository;
 import lombok.AllArgsConstructor;
@@ -12,7 +12,7 @@ import java.util.List;
 @AllArgsConstructor
 public class TagService {
 
-    private TagRepository tagRepository;
+    private final TagRepository tagRepository;
     public List<Tag> getAll() {
         return tagRepository.findAll();
     }

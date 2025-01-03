@@ -1,8 +1,8 @@
 package com.algonet.algonetapi.controllers;
 
-import com.algonet.algonetapi.Models.dto.problemDTOs.ProblemCreationDTO;
-import com.algonet.algonetapi.Models.dto.problemDTOs.ProblemPatchDTO;
-import com.algonet.algonetapi.Models.entities.Problem;
+import com.algonet.algonetapi.models.dto.problemDTOs.ProblemCreationDTO;
+import com.algonet.algonetapi.models.dto.problemDTOs.ProblemPatchDTO;
+import com.algonet.algonetapi.models.entities.Problem;
 import com.algonet.algonetapi.services.ProblemService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;

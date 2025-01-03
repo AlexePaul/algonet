@@ -1,6 +1,6 @@
 package com.algonet.algonetapi.repositories;
 
-import com.algonet.algonetapi.Models.entities.User;
+import com.algonet.algonetapi.models.entities.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 

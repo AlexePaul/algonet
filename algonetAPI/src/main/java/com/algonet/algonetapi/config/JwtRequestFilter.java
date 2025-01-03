@@ -1,6 +1,6 @@
 package com.algonet.algonetapi.config;
 
-import com.algonet.algonetapi.Models.entities.User;
+import com.algonet.algonetapi.models.entities.User;
 import com.algonet.algonetapi.services.AuthService;
 import com.algonet.algonetapi.utils.JwtUtil;
 import jakarta.servlet.FilterChain;
@@ -36,7 +36,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 
             if (jwtUtil.validateToken(token)) {
                 String username = jwtUtil.extractUsername(token);
-                User user = authService.getUserByUsername(username); // Replace UserDetailsService with AuthService
+                User user = authService.getUserByUsername(username);
                 List<SimpleGrantedAuthority> authorities = List.of(new SimpleGrantedAuthority("ROLE_" + user.getRole()));
 
                 // Create authentication object using user details

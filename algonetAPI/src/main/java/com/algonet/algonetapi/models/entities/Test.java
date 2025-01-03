@@ -1,4 +1,4 @@
-package com.algonet.algonetapi.Models.entities;
+package com.algonet.algonetapi.models.entities;
 
 import jakarta.persistence.*;
 import lombok.Getter;

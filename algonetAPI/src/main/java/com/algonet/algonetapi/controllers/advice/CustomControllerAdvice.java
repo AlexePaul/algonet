@@ -2,6 +2,7 @@ package com.algonet.algonetapi.controllers.advice;
 
 import com.algonet.algonetapi.exceptions.AlreadyExistingUserException;
 import com.algonet.algonetapi.exceptions.NotFoundException;
+import com.algonet.algonetapi.exceptions.UnauthorizedException;
 import com.algonet.algonetapi.exceptions.WrongAuthException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -29,5 +30,11 @@ public class CustomControllerAdvice {
     public ResponseEntity<?> notFound() {
         log.error("Not Found");
         return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+    }
+
+    @ExceptionHandler(UnauthorizedException.class)
+    public ResponseEntity<?> unauthorizedException() {
+        log.error("Unauthorized");
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
     }
 }

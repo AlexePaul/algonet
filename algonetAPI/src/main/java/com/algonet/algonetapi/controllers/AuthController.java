@@ -1,8 +1,8 @@
 package com.algonet.algonetapi.controllers;
 
-import com.algonet.algonetapi.Models.dto.userDTOs.UserCreationDTO;
-import com.algonet.algonetapi.Models.dto.userDTOs.UserLoginDTO;
-import com.algonet.algonetapi.Models.entities.User;
+import com.algonet.algonetapi.models.dto.userDTOs.UserCreationDTO;
+import com.algonet.algonetapi.models.dto.userDTOs.UserLoginDTO;
+import com.algonet.algonetapi.models.entities.User;
 import com.algonet.algonetapi.services.AuthService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;

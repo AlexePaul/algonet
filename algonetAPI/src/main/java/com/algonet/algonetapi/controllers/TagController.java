@@ -1,6 +1,6 @@
 package com.algonet.algonetapi.controllers;
 
-import com.algonet.algonetapi.Models.entities.Tag;
+import com.algonet.algonetapi.models.entities.Tag;
 import com.algonet.algonetapi.services.TagService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
