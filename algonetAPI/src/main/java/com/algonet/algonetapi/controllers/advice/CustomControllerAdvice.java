@@ -37,4 +37,10 @@ public class CustomControllerAdvice {
         log.error("Unauthorized");
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
     }
+
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<?> illegalArgument() {
+        log.error("Illegal Argument");
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+    }
 }
