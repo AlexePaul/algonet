@@ -1,7 +1,7 @@
 package com.algonet.algonetapi.services;
 
 import com.algonet.algonetapi.Models.entities.Tag;
-import com.algonet.algonetapi.exceptions.InexistantTagException;
+import com.algonet.algonetapi.exceptions.NotFoundException;
 import com.algonet.algonetapi.repositories.TagRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -18,7 +18,7 @@ public class TagService {
     }
 
     public Tag getById(Integer id) {
-        return tagRepository.findById(id).orElseThrow(InexistantTagException::new);
+        return tagRepository.findById(id).orElseThrow(NotFoundException::new);
     }
 
     public Tag create(String name) {
