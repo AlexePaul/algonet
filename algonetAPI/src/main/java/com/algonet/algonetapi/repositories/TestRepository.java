@@ -10,7 +10,7 @@ public interface TestRepository extends JpaRepository<Test, Integer> {
     @Query("""
             SELECT t
             FROM Test t
-            WHERE t.problem_id = :problemId
+            WHERE t.problem.id = :problemId
             """)
     List<Test> findAllByProblem_id(Integer problemId);
 }

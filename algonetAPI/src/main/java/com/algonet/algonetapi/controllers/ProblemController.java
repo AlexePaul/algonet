@@ -1,8 +1,10 @@
 package com.algonet.algonetapi.controllers;
 
+import com.algonet.algonetapi.annotations.GetAuthUser;
 import com.algonet.algonetapi.models.dto.problemDTOs.ProblemCreationDTO;
 import com.algonet.algonetapi.models.dto.problemDTOs.ProblemPatchDTO;
 import com.algonet.algonetapi.models.entities.Problem;
+import com.algonet.algonetapi.models.entities.User;
 import com.algonet.algonetapi.services.ProblemService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -16,8 +18,8 @@ public class ProblemController {
     private ProblemService problemService;
 
     @PostMapping("/create")
-    public ResponseEntity<Problem> create(@RequestBody ProblemCreationDTO problemCreationDTO){
-        return new ResponseEntity<>(problemService.create(problemCreationDTO), HttpStatus.OK);
+    public ResponseEntity<Problem> create(@GetAuthUser User user, @RequestBody ProblemCreationDTO problemCreationDTO){
+        return new ResponseEntity<>(problemService.create(user, problemCreationDTO), HttpStatus.OK);
     }
 
     @GetMapping("/get/{id}")

@@ -10,4 +10,6 @@ public class ProblemCreationDTO {
     private String title;
     private String body;
     private String restrictions;
+    private Integer timeLimit;
+    private Integer memoryLimit;
 }

@@ -5,6 +5,7 @@ import com.algonet.algonetapi.annotations.ValidateProblemId;
 import com.algonet.algonetapi.models.dto.solutionDTOs.SolutionCreationDTO;
 import com.algonet.algonetapi.models.entities.User;
 import com.algonet.algonetapi.services.SolutionService;
+import io.swagger.v3.oas.annotations.Parameter;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,14 +19,14 @@ public class SolutionController {
 
     @PostMapping("/create/problem/{problem_id}")
     @ValidateProblemId
-    public ResponseEntity<?> create(@GetAuthUser User user, @PathVariable Integer problem_id, @RequestBody SolutionCreationDTO solutionCreationDTO){
+    public ResponseEntity<?> create(@Parameter(hidden = true) @GetAuthUser User user, @PathVariable Integer problem_id, @RequestBody SolutionCreationDTO solutionCreationDTO){
         System.out.println(user.getId());
-        return new ResponseEntity<>(solutionService.create(user.getId(), problem_id, solutionCreationDTO), HttpStatus.OK);
+        return new ResponseEntity<>(solutionService.create(user, problem_id, solutionCreationDTO), HttpStatus.OK);
     }
     @GetMapping("/get/problem/{problem_id}")
     @ValidateProblemId
-    public ResponseEntity<?> getByProblemIdAndUserId(@GetAuthUser User user, @PathVariable Integer problem_id){
-        return new ResponseEntity<>(solutionService.getByProblemIdAndUserId(user.getId(), problem_id), HttpStatus.OK);
+    public ResponseEntity<?> getByProblemIdAndUserId(@Parameter(hidden = true) @GetAuthUser User user, @PathVariable Integer problem_id){
+        return new ResponseEntity<>(solutionService.getByUserAndProblemId(user, problem_id), HttpStatus.OK);
     }
     @GetMapping("/get/{id}")
     public ResponseEntity<?> get(@PathVariable Integer id){

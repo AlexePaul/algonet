@@ -1,5 +1,6 @@
 package com.algonet.algonetapi.services;
 
+import com.algonet.algonetapi.models.dto.tagDTOs.TagCreationDTO;
 import com.algonet.algonetapi.models.entities.Tag;
 import com.algonet.algonetapi.exceptions.NotFoundException;
 import com.algonet.algonetapi.repositories.TagRepository;
@@ -21,9 +22,9 @@ public class TagService {
         return tagRepository.findById(id).orElseThrow(NotFoundException::new);
     }
 
-    public Tag create(String name) {
+    public Tag create(TagCreationDTO tagCreationDTO) {
         Tag newTag = new Tag();
-        newTag.setName(name);
+        newTag.setName(tagCreationDTO.getName());
         return tagRepository.save(newTag);
     }
 

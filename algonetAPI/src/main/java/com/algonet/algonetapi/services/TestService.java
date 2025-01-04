@@ -1,9 +1,11 @@
 package com.algonet.algonetapi.services;
 
 import com.algonet.algonetapi.models.dto.testDTOs.TestCreationDTO;
+import com.algonet.algonetapi.models.entities.Problem;
 import com.algonet.algonetapi.models.entities.Test;
 import com.algonet.algonetapi.exceptions.NotFoundException;
 import com.algonet.algonetapi.repositories.TestRepository;
+import jakarta.persistence.EntityManager;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -12,10 +14,17 @@ import java.util.List;
 @Service
 @AllArgsConstructor
 public class TestService {
+
     private final TestRepository testRepository;
+    private final EntityManager entityManager;
+
     public Test create(Integer problem_id, TestCreationDTO testCreationDTO) {
         Test test = new Test();
-        test.setProblem_id(problem_id);
+
+        // Use EntityManager.getReference() to get a reference to the Problem entity
+        Problem problem = entityManager.getReference(Problem.class, problem_id);
+        test.setProblem(problem);
+
         test.setInput(testCreationDTO.getInput());
         test.setOutput(testCreationDTO.getOutput());
         return testRepository.save(test);

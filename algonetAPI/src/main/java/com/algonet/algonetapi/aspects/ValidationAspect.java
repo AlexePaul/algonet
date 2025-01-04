@@ -11,7 +11,7 @@ import org.springframework.web.server.ResponseStatusException;
 @Aspect
 @Component
 @AllArgsConstructor
-public class TestAspect {
+public class ValidationAspect {
     private final ProblemRepository problemRepository;
     @Before("@annotation(com.algonet.algonetapi.annotations.ValidateProblemId) && args(problem_id)")
     public void validateProblemId(Integer problem_id) {

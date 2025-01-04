@@ -4,6 +4,7 @@ import com.algonet.algonetapi.models.dto.problemDTOs.ProblemCreationDTO;
 import com.algonet.algonetapi.models.dto.problemDTOs.ProblemPatchDTO;
 import com.algonet.algonetapi.models.entities.Problem;
 import com.algonet.algonetapi.exceptions.NotFoundException;
+import com.algonet.algonetapi.models.entities.User;
 import com.algonet.algonetapi.repositories.ProblemRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.BeanUtils;
@@ -18,10 +19,11 @@ import static com.algonet.algonetapi.utils.MapperUtils.copyNonNullProperties;
 @AllArgsConstructor
 public class ProblemService {
     private final ProblemRepository problemRepository;
-    public Problem create(ProblemCreationDTO problemCreationDTO) {
+    public Problem create(User user, ProblemCreationDTO problemCreationDTO) {
         Problem problem = new Problem();
         BeanUtils.copyProperties(problemCreationDTO, problem);
-        problem.setCreated_at(Instant.now());
+        problem.setAuthor(user);
+        problem.setCreatedAt(Instant.now());
         return problemRepository.save(problem);
     }
 

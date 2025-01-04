@@ -28,7 +28,7 @@ public class AuthService {
         User newUser = new User();
         BeanUtils.copyProperties(userCreationDTO, newUser);
         newUser.setPassword(PasswordUtil.hashPassword(newUser.getPassword()));
-        newUser.setCreated_at(Instant.now());
+        newUser.setCreatedAt(Instant.now());
         newUser.setRole("User");
         userRepository.save(newUser);
         return newUser;

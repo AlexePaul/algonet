@@ -1,5 +1,6 @@
 package com.algonet.algonetapi.controllers;
 
+import com.algonet.algonetapi.models.dto.tagDTOs.TagCreationDTO;
 import com.algonet.algonetapi.models.entities.Tag;
 import com.algonet.algonetapi.services.TagService;
 import lombok.AllArgsConstructor;
@@ -24,8 +25,8 @@ public class TagController {
         return new ResponseEntity<>(tagService.getById(id),HttpStatus.OK);
     }
     @PostMapping("/create")
-    public ResponseEntity<Tag> create(@RequestBody String name){
-        return new ResponseEntity<>(tagService.create(name), HttpStatus.OK);
+    public ResponseEntity<Tag> create(@RequestBody TagCreationDTO tagCreationDTO){
+        return new ResponseEntity<>(tagService.create(tagCreationDTO), HttpStatus.OK);
     }
     @PutMapping("/update/{id}")
     public ResponseEntity<Tag> update(@RequestParam Integer id, @RequestBody String name){
