@@ -34,6 +34,8 @@ public class SecurityConfig {
                                 "/swagger-resources/**",
                                 "/webjars/**"
                         ).permitAll()
+                        .requestMatchers("/api/v1/problem/**").hasRole("UPLOADER")
+                        .requestMatchers("/api/v1/problem/get").hasAnyRole("UPLOADER", "USER")
                         .anyRequest().authenticated());
 
         //csrf

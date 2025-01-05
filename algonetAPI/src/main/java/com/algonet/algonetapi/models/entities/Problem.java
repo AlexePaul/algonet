@@ -16,7 +16,7 @@ public class Problem {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
     @NonNull
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "author_id", nullable = false)
     private User author;
     @NonNull

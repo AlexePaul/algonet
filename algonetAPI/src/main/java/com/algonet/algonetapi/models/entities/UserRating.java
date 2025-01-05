@@ -1,7 +1,8 @@
 package com.algonet.algonetapi.models.entities;
 
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.Getter;
+import lombok.Setter;
 
 @Entity
 @Table(name = "user_ratings")
@@ -12,7 +13,7 @@ public class UserRating {
     @EmbeddedId
     private UserRatingId id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @MapsId("userId")
     @JoinColumn(name = "user_id", nullable = false)
     private User user;

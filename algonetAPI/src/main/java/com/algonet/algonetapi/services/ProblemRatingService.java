@@ -19,10 +19,13 @@ public class ProblemRatingService {
 
 
     public ProblemRating update(User user, ProblemRatingUpdateDTO problemRatingUpdateDTO) {
+        if(problemRatingUpdateDTO.getProblemId() == null || problemRatingUpdateDTO.getTagId() == null || problemRatingUpdateDTO.getRating() == null){
+            throw new IllegalArgumentException("ProblemId, TagId and Rating must be provided");
+        }
         if(!Objects.equals(entityManager.getReference(Problem.class, problemRatingUpdateDTO.getProblemId()).getAuthor().getId(), user.getId())){
             throw new UnauthorizedException();
         }
-        ProblemRating problemRating = problemRatingRepository.findByProblemId(problemRatingUpdateDTO.getProblemId())
+        ProblemRating problemRating = problemRatingRepository.findByProblemIdAndTagId(problemRatingUpdateDTO.getProblemId(), problemRatingUpdateDTO.getTagId())
                 .orElse(new ProblemRating());
         problemRating.setProblem(entityManager.getReference(Problem.class, problemRatingUpdateDTO.getProblemId()));
         problemRating.setTag(entityManager.getReference(Tag.class, problemRatingUpdateDTO.getTagId()));

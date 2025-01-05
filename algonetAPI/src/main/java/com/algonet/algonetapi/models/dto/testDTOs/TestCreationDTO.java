@@ -1,11 +1,9 @@
 package com.algonet.algonetapi.models.dto.testDTOs;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NonNull;
-import lombok.Setter;
+import lombok.*;
 
 @AllArgsConstructor
+@NoArgsConstructor
 @Getter
 @Setter
 public class TestCreationDTO {

@@ -11,9 +11,9 @@ public interface ProblemRatingRepository extends JpaRepository<ProblemRating, In
     @Query("""
             SELECT pr
             FROM ProblemRating pr
-            WHERE pr.problem.id = :problemId
+            WHERE pr.problem.id = :problemId and pr.tag.id = :tagId
             """)
-    Optional<ProblemRating> findByProblemId(Integer problemId);
+    Optional<ProblemRating> findByProblemIdAndTagId(Integer problemId, Integer tagId);
     @Query("""
             SELECT pr
             FROM ProblemRating pr
