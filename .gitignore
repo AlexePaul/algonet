@@ -26,3 +26,60 @@ replay_pid*
 #MacOS
 
 *.DS_Store
+
+#CMAKE
+CMakeLists.txt.user
+CMakeCache.txt
+CMakeFiles
+CMakeScripts
+Testing
+Makefile
+cmake_install.cmake
+install_manifest.txt
+compile_commands.json
+CTestTestfile.cmake
+_deps
+CMakeUserPresets.json
+
+# Ignore build directories
+/build/
+# Ignore cmake-generated files
+/CMakeFiles/
+/CMakeCache.txt
+/cmake_install.cmake
+/Makefile
+/CTestTestfile.cmake
+
+# Ignore the generated Visual Studio files
+.vs/
+/.vscode/
+
+# Ignore IDE-specific files
+.idea/
+/*.sublime-workspace
+/*.sublime-project
+
+# Ignore all object and binary files
+*.o
+*.obj
+*.so
+*.a
+*.lib
+*.dll
+*.exe
+
+# Ignore temporary files
+*.log
+*.tmp
+*.bak
+*.swp
+
+# Ignore user-specific files (IDE-related)
+*.user
+*.userprefs
+*.suo
+*.db
+
+# Ignore CMake install logs
+install.log
+

@@ -12,6 +12,7 @@ public:
 
 private:
     crow::SimpleApp app;
+    void ConfigureCORS();
 };
 
 #endif
