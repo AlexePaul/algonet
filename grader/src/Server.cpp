@@ -21,7 +21,7 @@ void Server::ConfigureCORS() {
 }
 
 void Server::start() {
-  // app.loglevel(crow::LogLevel::Debug);
+  app.loglevel(crow::LogLevel::Warning);
   CROW_ROUTE(app, "/addToQueue")
       .methods("POST"_method)([this](const crow::request &req) {
         auto json_body = crow::json::load(req.body);
@@ -32,7 +32,7 @@ void Server::start() {
         int number = json_body["id"].i();
         TestRunner::addToQueue(number);
 
-        return crow::response("Problem ID added to the queue");
+        return crow::response("Solution ID added to the queue");
       });
 
   app.port(9090).multithreaded().run();

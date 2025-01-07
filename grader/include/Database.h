@@ -10,7 +10,8 @@ public:
                          "host=78.97.69.149 port=6543");
   void connect();
   void disconnect();
-  void getCode(int problemId, std::string &code);
+  void getCode(int, std::string &);
+  void getTests(int, std::vector<std::pair<std::string, std::string>> &);
 
 private:
   const std::string connStr;

@@ -13,7 +13,8 @@ public:
   void run();
 
 private:
-  static std::queue<int> problemQueue;
+  static std::queue<int> solutionQueue;
+  static bool runTest(const std::string &, const std::string &);
   Database *db;
 };
 
