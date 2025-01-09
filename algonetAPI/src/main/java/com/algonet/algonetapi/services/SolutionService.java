@@ -9,7 +9,6 @@ import com.algonet.algonetapi.repositories.SolutionRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
-import org.hibernate.Hibernate;
 import org.springframework.beans.BeanUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -20,13 +19,13 @@ import java.util.List;
 
 @AllArgsConstructor
 @Service
+@Transactional
 public class SolutionService {
 
     private final SolutionRepository solutionRepository;
     private final EntityManager entityManager;
     private final WebClient.Builder webClientBuilder;
 
-@Transactional
     public Solution create(User user, Integer problem_id, SolutionCreationDTO solutionCreationDTO) {
 
         Solution solution = new Solution();

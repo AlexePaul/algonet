@@ -1,5 +1,7 @@
 package com.algonet.algonetapi.models.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NonNull;
@@ -18,6 +20,7 @@ public class Test {
     @NonNull
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "problem_id", nullable = false)
+    @JsonIgnore
     private Problem problem;
 
     private String input;
@@ -25,4 +28,9 @@ public class Test {
     @NonNull
     @Column(nullable = false)
     private String output;
+
+    @JsonProperty("problemId")
+    private Integer getProblemId(){
+        return problem.getId();
+    }
 }

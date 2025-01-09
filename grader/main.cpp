@@ -8,7 +8,7 @@ int main() {
   Server server;
   TestRunner testRunner;
   std::thread serverThread(&Server::start, &server);
-  std::thread testRunnerThread(&TestRunner::run, &testRunner);
+  std::thread testRunnerThread(&TestRunner::main, &testRunner);
   serverThread.join();
   return 0;
 }

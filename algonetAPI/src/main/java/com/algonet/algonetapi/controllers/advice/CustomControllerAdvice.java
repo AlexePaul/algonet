@@ -7,6 +7,7 @@ import com.algonet.algonetapi.exceptions.WrongAuthException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotWritableException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
@@ -42,5 +43,11 @@ public class CustomControllerAdvice {
     public ResponseEntity<?> illegalArgument() {
         log.error("Illegal Argument");
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+    }
+
+    @ExceptionHandler(HttpMessageNotWritableException.class)
+    public ResponseEntity<?> httpMessageNotWritable() {
+        log.error("Http Message Not Writable");
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
     }
 }

@@ -7,6 +7,7 @@ import com.algonet.algonetapi.models.entities.UserRating;
 import com.algonet.algonetapi.models.entities.UserRatingId;
 import com.algonet.algonetapi.repositories.UserRatingRepository;
 import jakarta.persistence.EntityManager;
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -14,6 +15,7 @@ import java.util.List;
 
 @Service
 @AllArgsConstructor
+@Transactional
 public class UserRatingService {
     private final UserRatingRepository userRatingRepository;
     private final EntityManager entityManager;

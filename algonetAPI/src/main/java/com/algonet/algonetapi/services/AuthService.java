@@ -9,6 +9,7 @@ import com.algonet.algonetapi.models.entities.User;
 import com.algonet.algonetapi.repositories.UserRepository;
 import com.algonet.algonetapi.utils.JwtUtil;
 import com.algonet.algonetapi.utils.PasswordUtil;
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
@@ -18,6 +19,7 @@ import java.util.Optional;
 
 @Service
 @AllArgsConstructor
+@Transactional
 public class AuthService {
 
     private final UserRepository userRepository;
@@ -35,7 +37,6 @@ public class AuthService {
         userRepository.save(newUser);
         return newUser;
     }
-
     public String login(UserLoginDTO userLoginDTO){
         Optional<User> optionalUser = userRepository.findByUsername(userLoginDTO.getUsername());
         if(optionalUser.isEmpty())

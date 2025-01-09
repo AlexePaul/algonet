@@ -1,11 +1,12 @@
 package com.algonet.algonetapi.services;
 
+import com.algonet.algonetapi.exceptions.NotFoundException;
 import com.algonet.algonetapi.models.dto.testDTOs.TestCreationDTO;
 import com.algonet.algonetapi.models.entities.Problem;
 import com.algonet.algonetapi.models.entities.Test;
-import com.algonet.algonetapi.exceptions.NotFoundException;
 import com.algonet.algonetapi.repositories.TestRepository;
 import jakarta.persistence.EntityManager;
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -13,6 +14,7 @@ import java.util.List;
 
 @Service
 @AllArgsConstructor
+@Transactional
 public class TestService {
 
     private final TestRepository testRepository;

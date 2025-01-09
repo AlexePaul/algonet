@@ -5,6 +5,7 @@ import com.algonet.algonetapi.models.dto.ProblemRatingDTOs.ProblemRatingUpdateDT
 import com.algonet.algonetapi.models.entities.*;
 import com.algonet.algonetapi.repositories.ProblemRatingRepository;
 import jakarta.persistence.EntityManager;
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -13,6 +14,7 @@ import java.util.Objects;
 
 @Service
 @AllArgsConstructor
+@Transactional
 public class ProblemRatingService {
     private final ProblemRatingRepository problemRatingRepository;
     private final EntityManager entityManager;

@@ -3,12 +3,14 @@
 #include <fstream>
 #include <future>
 #include <iostream>
+#include <mutex>
 #include <queue>
 #include <thread>
 
 TestRunner::TestRunner() { db = new Database(); }
 
 std::queue<int> TestRunner::solutionQueue;
+std::mutex TestRunner::queueMutex;
 
 void TestRunner::addToQueue(int solutionId) { solutionQueue.push(solutionId); }
 
@@ -43,59 +45,78 @@ bool TestRunner::runTest(const std::string &input,
   output = trimOutput(output);
 
   // Compare the output with the expected output
+  /*
   if (output != expectedOutput) {
     std::cout << " Expected: " << expectedOutput << "\nGot: " << output
               << "\nOn input: " << input << "\n";
   }
+  */
 
   return output == expectedOutput;
 }
 
-void TestRunner::run() {
+void TestRunner::runTests(int solutionId) {
+
+  // Getting the code from the database
+  std::string code;
+  try {
+    db->getCode(solutionId, code);
+  } catch (const std::exception &e) {
+    std::cerr << e.what() << '\n';
+    return;
+  }
+
+  // Writing the code to a file
+  std::ofstream cppFile("solution.cpp");
+  cppFile << code;
+  cppFile.close();
+
+  // Compiling the code
+  system("g++ -std=c++17 -o solution solution.cpp");
+
+  // Fetch tests for this solution ID
+  std::vector<std::pair<std::string, std::string>> tests;
+  db->getTests(solutionId, tests);
+
+  // Run tests in parallel
+  std::vector<std::future<bool>> testFutures;
+  for (const auto &test : tests) {
+    testFutures.push_back(std::async(std::launch::async, TestRunner::runTest,
+                                     test.first, test.second));
+  }
+
+  // Collect results
+  int passedTests = 0;
+  for (auto &future : testFutures) {
+    if (future.get()) { // Retrieve the result of each test
+      passedTests++;
+    }
+  }
+
+  // Display test summary
+  // std::cout << "Solution ID " << solutionId << ": Passed " << passedTests <<
+  // "/"
+  //<< tests.size() << " tests.\n";
+}
+
+void TestRunner::main() {
   while (true) {
-    while (!solutionQueue.empty()) {
+    std::unique_lock<std::mutex> lock{queueMutex};
+    bool empty = solutionQueue.empty();
+    lock.unlock();
+
+    while (!empty) {
+
+      lock.lock();
       int solutionId = solutionQueue.front();
       solutionQueue.pop();
+      lock.unlock();
 
-      // Getting the code from the database
-      std::string code;
-      try {
-        db->getCode(solutionId, code);
-      } catch (const std::exception &e) {
-        std::cerr << e.what() << '\n';
-        continue;
-      }
+      runTests(solutionId);
 
-      // Writing the code to a file
-      std::ofstream cppFile("solution.cpp");
-      cppFile << code;
-      cppFile.close();
-
-      // Compiling the code
-      system("g++ -std=c++17 -o solution solution.cpp");
-
-      // Fetch tests for this solution ID
-      std::vector<std::pair<std::string, std::string>> tests;
-      db->getTests(solutionId, tests);
-
-      // Run tests in parallel
-      std::vector<std::future<bool>> testFutures;
-      for (const auto &test : tests) {
-        testFutures.push_back(std::async(
-            std::launch::async, TestRunner::runTest, test.first, test.second));
-      }
-
-      // Collect results
-      int passedTests = 0;
-      for (auto &future : testFutures) {
-        if (future.get()) { // Retrieve the result of each test
-          passedTests++;
-        }
-      }
-
-      // Display test summary
-      std::cout << "Solution ID " << solutionId << ": Passed " << passedTests
-                << "/" << tests.size() << " tests.\n";
+      lock.lock();
+      empty = solutionQueue.empty();
+      lock.unlock();
     }
     std::this_thread::sleep_for(std::chrono::seconds(1));
   }

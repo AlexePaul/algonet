@@ -25,7 +25,7 @@ public class SwaggerConfig {
 
         return new OpenAPI()
                 .info(new Info()
-                        .title("My API")
+                        .title("AlgoNet API")
                         .version("1.0")
                         .description("API Documentation with JWT Authentication"))
                 .addSecurityItem(securityRequirement) // Add security globally

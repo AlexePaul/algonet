@@ -1,5 +1,7 @@
 package com.algonet.algonetapi.models.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NonNull;
@@ -16,8 +18,9 @@ public class Problem {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
     @NonNull
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "author_id", nullable = false)
+    @JsonIgnore
     private User author;
     @NonNull
     @Column(name = "time_limit", nullable = false)
@@ -36,4 +39,9 @@ public class Problem {
     private String restrictions;
     @Column(name = "created_at", nullable = false, updatable = false)
     private Instant createdAt;
+
+    @JsonProperty("authorId")
+    private Integer getAuthorId(){
+        return author.getId();
+    }
 }
