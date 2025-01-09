@@ -83,3 +83,4 @@ CMakeUserPresets.json
 # Ignore CMake install logs
 install.log
 
+grader/build/grader
