@@ -22,7 +22,7 @@ public class ProblemRatingService {
 
     public ProblemRating update(User user, ProblemRatingUpdateDTO problemRatingUpdateDTO) {
         if(problemRatingUpdateDTO.getProblemId() == null || problemRatingUpdateDTO.getTagId() == null || problemRatingUpdateDTO.getRating() == null){
-            throw new IllegalArgumentException("ProblemId, TagId and Rating must be provided");
+            throw new IllegalArgumentException();
         }
         if(!Objects.equals(entityManager.getReference(Problem.class, problemRatingUpdateDTO.getProblemId()).getAuthor().getId(), user.getId())){
             throw new UnauthorizedException();

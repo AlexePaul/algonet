@@ -44,4 +44,25 @@ public class Problem {
     private Integer getAuthorId(){
         return author.getId();
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Problem problem = (Problem) o;
+        return id.equals(problem.id) &&
+                author.equals(problem.author) &&
+                timeLimit.equals(problem.timeLimit) &&
+                memoryLimit.equals(problem.memoryLimit) &&
+                title.equals(problem.title) &&
+                body.equals(problem.body) &&
+                restrictions.equals(problem.restrictions) &&
+                createdAt.equals(problem.createdAt);
+    }
+
+    @Override
+    public int hashCode() {
+        return id.hashCode();
+    }
 }

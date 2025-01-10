@@ -20,7 +20,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
-public class ProblemRatingServiceTest {
+class ProblemRatingServiceTest {
     @Mock
     private ProblemRatingRepository problemRatingRepository;
 
@@ -66,9 +66,7 @@ public class ProblemRatingServiceTest {
 
         ProblemRating newProblemRating = problemRatingService.update(user, problemRatingUpdateDTO);
 
-        assertEquals(2, newProblemRating.getProblem().getId());
-        assertEquals(3, newProblemRating.getTag().getId());
-        assertEquals(5, newProblemRating.getRating());
+        assertEquals(problemRating, newProblemRating);
 
         verify(problemRatingRepository, times(1)).save(any());
         verify(problemRatingRepository, times(1)).findByProblemIdAndTagId(any(), any());
@@ -104,9 +102,9 @@ public class ProblemRatingServiceTest {
 
         ProblemRating newProblemRating = problemRatingService.update(user, problemRatingUpdateDTO);
 
-        assertEquals(2, newProblemRating.getProblem().getId());
-        assertEquals(3, newProblemRating.getTag().getId());
+        assertEquals(problemRating, newProblemRating);
         assertEquals(5, newProblemRating.getRating());
+
 
         verify(problemRatingRepository, times(1)).save(any());
         verify(problemRatingRepository, times(1)).findByProblemIdAndTagId(any(), any());
@@ -125,6 +123,7 @@ public class ProblemRatingServiceTest {
         problem.setId(2);
         problem.setAuthor(new User());
 
+        //noinspection WriteOnlyObject
         Tag tag = new Tag();
         tag.setId(3);
 
@@ -168,7 +167,7 @@ public class ProblemRatingServiceTest {
         when(problemRatingRepository.findAllByProblemId(1)).thenReturn(java.util.List.of(problemRating));
 
         assertEquals(1, problemRatingService.get(1).size());
-        assertEquals(5, problemRatingService.get(1).get(0).getRating());
+        assertEquals(5, problemRatingService.get(1).getFirst().getRating());
 
         verify(problemRatingRepository, times(2)).findAllByProblemId(1);
     }

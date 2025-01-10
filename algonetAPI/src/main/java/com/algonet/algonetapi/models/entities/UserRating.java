@@ -38,4 +38,20 @@ public class UserRating {
     private Integer getTagId(){
         return tag.getId();
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        UserRating userRating = (UserRating) o;
+
+        return rating.equals(userRating.rating) &&
+                user.equals(userRating.user) &&
+                tag.equals(userRating.tag);
+    }
+
+    @Override
+    public int hashCode() {
+        return id.hashCode();
+    }
 }

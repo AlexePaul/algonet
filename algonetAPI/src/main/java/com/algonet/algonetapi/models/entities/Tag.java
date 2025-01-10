@@ -16,4 +16,19 @@ public class Tag {
     @NonNull
     @Column(nullable = false)
     private String name;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Tag tag = (Tag) o;
+        return id.equals(tag.id) &&
+                name.equals(tag.name);
+    }
+
+    @Override
+    public int hashCode() {
+        return id.hashCode();
+    }
 }

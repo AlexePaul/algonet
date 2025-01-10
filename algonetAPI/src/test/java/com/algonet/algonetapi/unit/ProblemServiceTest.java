@@ -20,7 +20,7 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
-public class ProblemServiceTest {
+class ProblemServiceTest {
     @Mock
     private ProblemRepository problemRepository;
 
@@ -39,6 +39,7 @@ public class ProblemServiceTest {
         User user = new User();
         ProblemCreationDTO problemCreationDTO = new ProblemCreationDTO("title", "description", "restrictions", 1, 2);
         Problem problem = new Problem();
+        problem.setId(1);
         Instant fixedTime = Instant.parse("2025-01-04T10:00:00Z");
 
         BeanUtils.copyProperties(problemCreationDTO, problem);
@@ -50,15 +51,9 @@ public class ProblemServiceTest {
                 .thenAnswer(invocation -> invocation.getArgument(0));
 
         Problem createdProblem = problemService.create(user, problemCreationDTO, fixedTime);
+        createdProblem.setId(1);
 
-        assertEquals(problem.getTitle(), createdProblem.getTitle());
-        assertEquals(problem.getBody(), createdProblem.getBody());
-        assertEquals(problem.getRestrictions(), createdProblem.getRestrictions());
-        assertEquals(problem.getTimeLimit(), createdProblem.getTimeLimit());
-        assertEquals(problem.getMemoryLimit(), createdProblem.getMemoryLimit());
-        assertEquals(problem.getAuthor(), createdProblem.getAuthor());
-        assertEquals(problem.getCreatedAt(), createdProblem.getCreatedAt());
-
+        assertEquals(problem, createdProblem);
 
         verify(problemRepository, times(1)).save(any());
     }

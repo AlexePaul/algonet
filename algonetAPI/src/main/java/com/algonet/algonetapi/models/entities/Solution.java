@@ -50,4 +50,22 @@ public class Solution {
     private Integer getUserId(){
         return user.getId();
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Solution solution = (Solution) o;
+        return grade.equals(solution.grade) &&
+                problem.equals(solution.problem) &&
+                user.equals(solution.user) &&
+                createdAt.equals(solution.createdAt) &&
+                code.equals(solution.code);
+    }
+
+    @Override
+    public int hashCode() {
+        return id.hashCode();
+    }
+
 }

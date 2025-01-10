@@ -33,4 +33,21 @@ public class Test {
     private Integer getProblemId(){
         return problem.getId();
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Test test = (Test) o;
+        return id.equals(test.id) &&
+                problem.equals(test.problem) &&
+                input.equals(test.input) &&
+                output.equals(test.output);
+    }
+
+    @Override
+    public int hashCode() {
+        return id.hashCode();
+    }
 }

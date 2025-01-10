@@ -11,6 +11,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.Instant;
+
 @RestController
 @AllArgsConstructor
 @RequestMapping("/api/v1/solution")
@@ -21,7 +23,7 @@ public class SolutionController {
     @ValidateProblemId
     public ResponseEntity<?> create(@Parameter(hidden = true) @GetAuthUser User user, @PathVariable Integer problem_id, @RequestBody SolutionCreationDTO solutionCreationDTO){
         System.out.println(user.getId());
-        return new ResponseEntity<>(solutionService.create(user, problem_id, solutionCreationDTO), HttpStatus.OK);
+        return new ResponseEntity<>(solutionService.create(user, problem_id, solutionCreationDTO, Instant.now()), HttpStatus.OK);
     }
     @GetMapping("/get/problem/{problem_id}")
     @ValidateProblemId

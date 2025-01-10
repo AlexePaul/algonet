@@ -1,9 +1,6 @@
 package com.algonet.algonetapi.controllers.advice;
 
-import com.algonet.algonetapi.exceptions.AlreadyExistingUserException;
-import com.algonet.algonetapi.exceptions.NotFoundException;
-import com.algonet.algonetapi.exceptions.UnauthorizedException;
-import com.algonet.algonetapi.exceptions.WrongAuthException;
+import com.algonet.algonetapi.exceptions.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -48,6 +45,12 @@ public class CustomControllerAdvice {
     @ExceptionHandler(HttpMessageNotWritableException.class)
     public ResponseEntity<?> httpMessageNotWritable() {
         log.error("Http Message Not Writable");
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+    }
+
+    @ExceptionHandler(QueueInsertionException.class)
+    public ResponseEntity<?> queueInsertionException() {
+        log.error("Queue Insertion Exception");
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
     }
 }

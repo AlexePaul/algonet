@@ -49,18 +49,17 @@ class AuthServiceTest {
         newUser.setPassword(PasswordUtil.hashPassword(newUser.getPassword()));
         newUser.setCreatedAt(fixedTime);
         newUser.setRole("USER");
+        newUser.setId(1);
 
         when(userRepository.findByUsername(userCreationDTO.getUsername())).thenReturn(Optional.empty());
         when(userRepository.save(newUser)).thenReturn(newUser);
 
         User registeredUser = authService.register(userCreationDTO, fixedTime);
+        registeredUser.setId(1);
 
-
-        assertEquals(newUser.getUsername(), registeredUser.getUsername());
-        assertEquals(newUser.getEmail(), registeredUser.getEmail());
-        assertEquals(newUser.getRole(), registeredUser.getRole());
-        assertEquals(newUser.getCreatedAt(), registeredUser.getCreatedAt());
         assertTrue(PasswordUtil.checkPassword(userCreationDTO.getPassword(), registeredUser.getPassword()));
+        newUser.setPassword(registeredUser.getPassword());
+        assertEquals(newUser, registeredUser);
 
         verify(userRepository, times(1)).findByUsername(userCreationDTO.getUsername());
     }

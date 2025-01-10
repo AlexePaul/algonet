@@ -38,4 +38,20 @@ public class ProblemRating {
     private Integer getTagId(){
         return tag.getId();
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ProblemRating problemRating = (ProblemRating) o;
+
+        return rating.equals(problemRating.rating) &&
+                problem.equals(problemRating.problem) &&
+                tag.equals(problemRating.tag);
+    }
+
+    @Override
+    public int hashCode() {
+        return id.hashCode();
+    }
 }

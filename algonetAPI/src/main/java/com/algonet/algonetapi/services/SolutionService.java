@@ -10,9 +10,7 @@ import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.BeanUtils;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.reactive.function.client.WebClient;
 
 import java.time.Instant;
 import java.util.List;
@@ -24,9 +22,9 @@ public class SolutionService {
 
     private final SolutionRepository solutionRepository;
     private final EntityManager entityManager;
-    private final WebClient.Builder webClientBuilder;
+    private final QueueService queueService;
 
-    public Solution create(User user, Integer problem_id, SolutionCreationDTO solutionCreationDTO) {
+    public Solution create(User user, Integer problem_id, SolutionCreationDTO solutionCreationDTO, Instant now) {
 
         Solution solution = new Solution();
         BeanUtils.copyProperties(solutionCreationDTO, solution);
@@ -37,22 +35,13 @@ public class SolutionService {
         solution.setUser(user);
 
         solution.setGrade(-1);
-        solution.setCreatedAt(Instant.now());
+        solution.setCreatedAt(now);
 
+        //solution has to be saved before adding to queue,
+        // so that the grader doesn't try to grade a solution that doesn't exist
         var savedSolution = solutionRepository.save(solution);
 
-        WebClient webClient = webClientBuilder.baseUrl("http://localhost:9090").build();
-        webClient.post()
-                .uri("/addToQueue")
-                .bodyValue("{\"id\": " + solution.getId() + "}")
-                .retrieve()
-                .toEntity(String.class)
-                .doOnError(e -> System.err.println("Request failed: " + e.getMessage()))
-                .subscribe(response -> {
-                    if (response.getStatusCode() == HttpStatus.OK) {
-                        System.out.println("Response: " + response.getBody());
-                    }
-                });
+        queueService.addSolutionToQueue(solution.getId());
 
         return savedSolution;
     }
@@ -66,4 +55,6 @@ public class SolutionService {
         return solutionRepository.findByUserAndProblemId(user, problemId)
                 .orElseThrow(NotFoundException::new);
     }
+
+
 }
