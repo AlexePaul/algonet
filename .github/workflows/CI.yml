@@ -13,13 +13,14 @@ jobs:
     steps:
       # Checkout the repository
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
-      # Set up Java 21
+      # Set up Java 21 with the OpenJDK distribution
       - name: Set up JDK 21
         uses: actions/setup-java@v3
         with:
           java-version: '21'
+          distribution: 'openjdk'  # Use the OpenJDK distribution for Java 21
 
       # Change directory to a subfolder and run a Maven build
       - name: Run Maven build
