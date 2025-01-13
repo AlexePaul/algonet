@@ -2,6 +2,7 @@ package com.algonet.algonetapi.services;
 
 import com.algonet.algonetapi.exceptions.NotFoundException;
 import com.algonet.algonetapi.models.dto.tagDTOs.TagCreationDTO;
+import com.algonet.algonetapi.models.dto.tagDTOs.TagUpdateDTO;
 import com.algonet.algonetapi.models.entities.Tag;
 import com.algonet.algonetapi.repositories.TagRepository;
 import jakarta.transaction.Transactional;
@@ -30,10 +31,10 @@ public class TagService {
         return tagRepository.save(newTag);
     }
 
-    public Tag update(Integer id, String name) {
+    public Tag update(Integer id, TagUpdateDTO tagUpdateDTO) {
         Tag updateTag = new Tag();
         updateTag.setId(id);
-        updateTag.setName(name);
+        updateTag.setName(tagUpdateDTO.getName());
         return tagRepository.save(updateTag);
     }
 

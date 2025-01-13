@@ -20,22 +20,22 @@ import java.time.Instant;
 public class ProblemController {
     private ProblemService problemService;
 
-    @PostMapping("/create")
+    @PostMapping("")
     public ResponseEntity<Problem> create(@Parameter(hidden = true) @GetAuthUser User user, @RequestBody ProblemCreationDTO problemCreationDTO){
         return new ResponseEntity<>(problemService.create(user, problemCreationDTO, Instant.now()), HttpStatus.OK);
     }
 
-    @GetMapping("/get/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<Problem> get(@PathVariable Integer id){
         return new ResponseEntity<>(problemService.get(id), HttpStatus.OK);
     }
 
-    @PutMapping("/update/{id}")
+    @PutMapping("/{id}")
     public ResponseEntity<Problem> update(@Parameter(hidden = true) @GetAuthUser User user, @PathVariable Integer id, @RequestBody ProblemPatchDTO problemPatchDTO){
         return new ResponseEntity<>(problemService.update(user, id, problemPatchDTO), HttpStatus.OK);
     }
 
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<?> delete(@Parameter(hidden = true) @GetAuthUser User user, @PathVariable Integer id){
         problemService.delete(user, id);
         return new ResponseEntity<>(HttpStatus.OK);

@@ -1,6 +1,7 @@
 package com.algonet.algonetapi.unit;
 
 import com.algonet.algonetapi.models.dto.tagDTOs.TagCreationDTO;
+import com.algonet.algonetapi.models.dto.tagDTOs.TagUpdateDTO;
 import com.algonet.algonetapi.models.entities.Tag;
 import com.algonet.algonetapi.repositories.TagRepository;
 import com.algonet.algonetapi.services.TagService;
@@ -52,16 +53,16 @@ class TagServiceTest {
         Tag tag = new Tag();
         tag.setId(1);
         tag.setName("name");
-        String name = "newName";
+        TagUpdateDTO tagUpdateDTO = new TagUpdateDTO("new name");
 
         when(tagRepository.save(any()))
                 .thenAnswer(invocation -> invocation.getArgument(0));
 
-        Tag updatedTag = tagService.update(tag.getId(), name);
+        Tag updatedTag = tagService.update(tag.getId(), tagUpdateDTO);
         updatedTag.setId(1);
 
         assertNotEquals(tag, updatedTag);
-        assertEquals(name, updatedTag.getName());
+        assertEquals(tagUpdateDTO.getName(), updatedTag.getName());
     }
 
     @Test

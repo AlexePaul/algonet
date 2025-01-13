@@ -19,18 +19,18 @@ import java.time.Instant;
 public class SolutionController {
     private SolutionService solutionService;
 
-    @PostMapping("/create/problem/{problem_id}")
+    @PostMapping("problem/{problem_id}")
     @ValidateProblemId
     public ResponseEntity<?> create(@Parameter(hidden = true) @GetAuthUser User user, @PathVariable Integer problem_id, @RequestBody SolutionCreationDTO solutionCreationDTO){
         System.out.println(user.getId());
         return new ResponseEntity<>(solutionService.create(user, problem_id, solutionCreationDTO, Instant.now()), HttpStatus.OK);
     }
-    @GetMapping("/get/problem/{problem_id}")
+    @GetMapping("/problem/{problem_id}")
     @ValidateProblemId
     public ResponseEntity<?> getByProblemIdAndUserId(@Parameter(hidden = true) @GetAuthUser User user, @PathVariable Integer problem_id){
         return new ResponseEntity<>(solutionService.getByUserAndProblemId(user, problem_id), HttpStatus.OK);
     }
-    @GetMapping("/get/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<?> get(@PathVariable Integer id){
         return new ResponseEntity<>(solutionService.get(id), HttpStatus.OK);
     }

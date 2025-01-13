@@ -17,12 +17,12 @@ public class UserRatingController {
     private final UserRatingService userRatingService;
 
     // Updates or creates (if it doesn't exist) a user rating for a tag
-    @PutMapping("/update")
+    @PutMapping("")
     public ResponseEntity<?> update(@Parameter(hidden = true) @GetAuthUser User user, @RequestBody UserRatingUpdateDTO userRatingUpdateDTO){
         return new ResponseEntity<>(userRatingService.update(user, userRatingUpdateDTO), HttpStatus.OK);
     }
 
-    @GetMapping("/get")
+    @GetMapping("")
     public ResponseEntity<?> get(@Parameter(hidden = true) @GetAuthUser User user){
         return new ResponseEntity<>(userRatingService.get(user), HttpStatus.OK);
     }

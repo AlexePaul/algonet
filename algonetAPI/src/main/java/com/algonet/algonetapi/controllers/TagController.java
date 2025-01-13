@@ -1,6 +1,7 @@
 package com.algonet.algonetapi.controllers;
 
 import com.algonet.algonetapi.models.dto.tagDTOs.TagCreationDTO;
+import com.algonet.algonetapi.models.dto.tagDTOs.TagUpdateDTO;
 import com.algonet.algonetapi.models.entities.Tag;
 import com.algonet.algonetapi.services.TagService;
 import lombok.AllArgsConstructor;
@@ -16,24 +17,24 @@ import java.util.List;
 public class TagController {
     private TagService tagService;
 
-    @GetMapping("/getAll")
+    @GetMapping("")
     public ResponseEntity<List<Tag>> getAll(){
         return new ResponseEntity<>(tagService.getAll(), HttpStatus.OK);
     }
-    @GetMapping("/get/{id}")
-    public ResponseEntity<Tag> getById(@RequestParam Integer id){
+    @GetMapping("/{id}")
+    public ResponseEntity<Tag> getById(@PathVariable Integer id){
         return new ResponseEntity<>(tagService.getById(id),HttpStatus.OK);
     }
-    @PostMapping("/create")
+    @PostMapping("")
     public ResponseEntity<Tag> create(@RequestBody TagCreationDTO tagCreationDTO){
         return new ResponseEntity<>(tagService.create(tagCreationDTO), HttpStatus.OK);
     }
-    @PutMapping("/update/{id}")
-    public ResponseEntity<Tag> update(@RequestParam Integer id, @RequestBody String name){
-        return new ResponseEntity<>(tagService.update(id, name), HttpStatus.OK);
+    @PutMapping("/{id}")
+    public ResponseEntity<Tag> update(@PathVariable Integer id, @RequestBody TagUpdateDTO tagUpdateDTO){
+        return new ResponseEntity<>(tagService.update(id, tagUpdateDTO), HttpStatus.OK);
     }
-    @DeleteMapping("/delete/{id}")
-    public ResponseEntity<?> delete(@RequestParam Integer id){
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> delete(@PathVariable Integer id){
         tagService.delete(id);
         return ResponseEntity.status(HttpStatus.OK).build();
     }

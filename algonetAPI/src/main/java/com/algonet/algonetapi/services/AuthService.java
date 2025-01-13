@@ -25,7 +25,7 @@ public class AuthService {
     private final UserRepository userRepository;
 
     public User register(UserCreationDTO userCreationDTO, Instant createdAt) {
-        if(userRepository.findByUsername(userCreationDTO.getUsername()).isPresent())
+        if(userRepository.findByUsername(userCreationDTO.getUsername()).isPresent() || userRepository.findByEmail(userCreationDTO.getEmail()).isPresent())
             throw new AlreadyExistingUserException();
         if(userCreationDTO.getUsername() == null || userCreationDTO.getPassword() == null || userCreationDTO.getEmail() == null)
             throw new IllegalArgumentException();
@@ -34,8 +34,7 @@ public class AuthService {
         newUser.setPassword(PasswordUtil.hashPassword(newUser.getPassword()));
         newUser.setCreatedAt(createdAt);
         newUser.setRole("USER");
-        userRepository.save(newUser);
-        return newUser;
+        return userRepository.save(newUser);
     }
     public String login(UserLoginDTO userLoginDTO){
         Optional<User> optionalUser = userRepository.findByUsername(userLoginDTO.getUsername());
