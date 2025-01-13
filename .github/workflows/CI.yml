@@ -15,15 +15,15 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      # Set up Java 21
+      # Set up Java 21 (Adoptium distribution)
       - name: Set up JDK 21
         uses: actions/setup-java@v3
         with:
           java-version: '21'
-          distribution: 'adoptopenjdk'  # Or 'openjdk' if you prefer OpenJDK
+          distribution: 'adoptium'  # Use 'adoptium' for Java 21
           cache: 'maven'
 
-      # Cache dependencies to improve workflow execution time
+      # Cache Maven dependencies
       - name: Cache Maven dependencies
         uses: actions/cache@v2
         with:
@@ -32,12 +32,12 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-maven-
 
-      # Change directory to a subfolder and run a Maven build
+      # Run Maven build
       - name: Run Maven build
         run: mvn clean install
         working-directory: ./algonetAPI
 
-      # Change directory again to run tests in a different subfolder
+      # Run tests
       - name: Run tests
         run: mvn test -DTest=*IT
         working-directory: ./algonetAPI
