@@ -43,7 +43,7 @@ class AuthServiceTest {
     @DisplayName("Register user successfully")
     void registerUserSuccessfully() {
         Instant fixedTime = Instant.parse("2025-01-04T10:00:00Z");
-        UserCreationDTO userCreationDTO = new UserCreationDTO("username", "password", "email");
+        UserCreationDTO userCreationDTO = new UserCreationDTO("username", "password", "email@email.com");
         User newUser = new User();
         BeanUtils.copyProperties(userCreationDTO, newUser);
         newUser.setPassword(PasswordUtil.hashPassword(newUser.getPassword()));
@@ -52,7 +52,8 @@ class AuthServiceTest {
         newUser.setId(1);
 
         when(userRepository.findByUsername(userCreationDTO.getUsername())).thenReturn(Optional.empty());
-        when(userRepository.save(newUser)).thenReturn(newUser);
+        when(userRepository.save(any(User.class)))
+                .thenAnswer(invocation -> invocation.getArgument(0));
 
         User registeredUser = authService.register(userCreationDTO, fixedTime);
         registeredUser.setId(1);
