@@ -1,8 +1,8 @@
-name: Java CI with Maven
+name: Integration Testing
 
 on:
   push:
-    branches: [ "main", "CI"]
+    branches: [ "main"]
   pull_request:
     branches: [ "main" ]
 
