@@ -17,7 +17,7 @@ import java.time.Instant;
 @AllArgsConstructor
 @RequestMapping("/api/v1/solution")
 public class SolutionController {
-    private SolutionService solutionService;
+    private final SolutionService solutionService;
 
     @PostMapping("problem/{problem_id}")
     @ValidateProblemId
@@ -31,8 +31,8 @@ public class SolutionController {
         return new ResponseEntity<>(solutionService.getByUserAndProblemId(user, problem_id), HttpStatus.OK);
     }
     @GetMapping("/{id}")
-    public ResponseEntity<?> get(@PathVariable Integer id){
-        return new ResponseEntity<>(solutionService.get(id), HttpStatus.OK);
+    public ResponseEntity<?> get(@Parameter(hidden = true) @GetAuthUser User user, @PathVariable Integer id){
+        return new ResponseEntity<>(solutionService.get(user.getId(), id), HttpStatus.OK);
     }
 
 }

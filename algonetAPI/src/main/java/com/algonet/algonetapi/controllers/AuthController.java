@@ -15,7 +15,7 @@ import java.time.Instant;
 @RequestMapping("/api/v1/auth")
 @AllArgsConstructor
 public class AuthController {
-    private AuthService authService;
+    private final AuthService authService;
     @PostMapping("/register")
     public ResponseEntity<User> register(@RequestBody UserCreationDTO userCreationDTO){
         return new ResponseEntity<>(authService.register(userCreationDTO, Instant.now()), HttpStatus.OK);

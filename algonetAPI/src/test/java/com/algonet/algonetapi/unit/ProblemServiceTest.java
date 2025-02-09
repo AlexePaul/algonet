@@ -87,7 +87,7 @@ class ProblemServiceTest {
         when(problemRepository.save(any(Problem.class)))
                 .thenAnswer(invocation -> invocation.getArgument(0));
 
-        Problem gottenProblem = problemService.update(user, 1, problemPatchDTO);
+        Problem gottenProblem = problemService.update(user.getId(), 1, problemPatchDTO);
 
         assertEquals(problem.getTitle(), gottenProblem.getTitle());
         assertEquals(problem.getBody(), gottenProblem.getBody());
@@ -110,7 +110,7 @@ class ProblemServiceTest {
 
         when(problemRepository.findById(1)).thenReturn(Optional.of(problem));
 
-        problemService.delete(user, 1);
+        problemService.delete(user.getId(), 1);
 
         verify(problemRepository, times(1)).deleteById(1);
     }

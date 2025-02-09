@@ -10,7 +10,6 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ProblemRatingUpdateDTO {
-    private Integer problemId;
     private Integer tagId;
     private Integer rating;
 }

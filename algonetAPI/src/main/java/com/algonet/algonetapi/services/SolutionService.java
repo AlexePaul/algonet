@@ -1,5 +1,6 @@
 package com.algonet.algonetapi.services;
 
+import com.algonet.algonetapi.annotations.CheckOwn;
 import com.algonet.algonetapi.exceptions.NotFoundException;
 import com.algonet.algonetapi.models.dto.solutionDTOs.SolutionCreationDTO;
 import com.algonet.algonetapi.models.entities.Problem;
@@ -45,8 +46,8 @@ public class SolutionService {
 
         return savedSolution;
     }
-
-    public Solution get(Integer id) {
+    @CheckOwn(entity = Solution.class)
+    public Solution get(@SuppressWarnings("unused") Integer userId, Integer id) {
         return solutionRepository.findById(id).orElseThrow(NotFoundException::new);
     }
 

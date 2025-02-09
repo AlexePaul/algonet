@@ -46,7 +46,7 @@ class TestServiceTest {
         when(entityManager.getReference(Problem.class, problem.getId())).thenReturn(problem);
         when(testRepository.save(any(Test.class))).thenAnswer(invocation -> invocation.getArgument(0));
 
-        Test createdTest = testService.create(problem.getId(), testCreationDTO);
+        Test createdTest = testService.create(1, problem.getId(), testCreationDTO);
 
         assertEquals(testCreationDTO.getInput(), createdTest.getInput());
         assertEquals(testCreationDTO.getOutput(), createdTest.getOutput());
@@ -61,7 +61,7 @@ class TestServiceTest {
 
         when(testRepository.findById(1)).thenReturn(Optional.of(test));
 
-        Test gottenTest = testService.get(1);
+        Test gottenTest = testService.get(1,1);
 
         assertEquals(test, gottenTest);
     }
@@ -71,7 +71,7 @@ class TestServiceTest {
     void getTestThrowsNotFoundException() {
         when(testRepository.findById(1)).thenReturn(Optional.empty());
 
-        assertThrows(NotFoundException.class, () -> testService.get(1));
+        assertThrows(NotFoundException.class, () -> testService.get(1,1));
     }
 
     @org.junit.jupiter.api.Test
@@ -86,7 +86,7 @@ class TestServiceTest {
         when(testRepository.findById(1)).thenReturn(Optional.of(test));
         when(testRepository.save(any(Test.class))).thenAnswer(invocation -> invocation.getArgument(0));
 
-        Test updatedTest = testService.update(1, testCreationDTO);
+        Test updatedTest = testService.update(1,1, testCreationDTO);
 
         assertEquals(testCreationDTO.getInput(), updatedTest.getInput());
         assertEquals(testCreationDTO.getOutput(), updatedTest.getOutput());
@@ -98,7 +98,7 @@ class TestServiceTest {
         TestCreationDTO testCreationDTO = new TestCreationDTO("input", "output");
         when(testRepository.findById(1)).thenReturn(Optional.empty());
 
-        assertThrows(NotFoundException.class, () -> testService.update(1, testCreationDTO));
+        assertThrows(NotFoundException.class, () -> testService.update(1,1, testCreationDTO));
     }
 
     @org.junit.jupiter.api.Test
@@ -106,7 +106,7 @@ class TestServiceTest {
     void deleteTestSuccessfully() {
         doNothing().when(testRepository).deleteById(1);
 
-        assertDoesNotThrow(() -> testService.delete(1));
+        assertDoesNotThrow(() -> testService.delete(1,1));
         verify(testRepository, times(1)).deleteById(1);
     }
 
@@ -123,7 +123,7 @@ class TestServiceTest {
 
         when(testRepository.findAllByProblem_id(problem.getId())).thenReturn(tests);
 
-        List<Test> gottenTests = testService.getAll(problem.getId());
+        List<Test> gottenTests = testService.getAll(1, problem.getId());
 
         assertEquals(2, gottenTests.size());
         assertTrue(gottenTests.contains(test1));

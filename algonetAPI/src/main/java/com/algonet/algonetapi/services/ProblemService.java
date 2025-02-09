@@ -1,6 +1,6 @@
 package com.algonet.algonetapi.services;
 
-import com.algonet.algonetapi.annotations.CheckProblemAuthor;
+import com.algonet.algonetapi.annotations.CheckOwn;
 import com.algonet.algonetapi.exceptions.NotFoundException;
 import com.algonet.algonetapi.models.dto.problemDTOs.ProblemCreationDTO;
 import com.algonet.algonetapi.models.dto.problemDTOs.ProblemPatchDTO;
@@ -33,14 +33,14 @@ public class ProblemService {
         return problemRepository.findById(id).orElseThrow(NotFoundException::new);
     }
 
-    @CheckProblemAuthor
-    public Problem update(@SuppressWarnings("unused") User user, Integer id, ProblemPatchDTO problemPatchDTO) {
+    @CheckOwn(entity = Problem.class)
+    public Problem update(@SuppressWarnings("unused") Integer userId, Integer id, ProblemPatchDTO problemPatchDTO) {
         Problem problem = problemRepository.findById(id).orElseThrow(NotFoundException::new);
         copyNonNullProperties(problemPatchDTO, problem);
         return problemRepository.save(problem);
     }
-    @CheckProblemAuthor
-    public void delete(@SuppressWarnings("unused") User user, Integer id) {
+    @CheckOwn(entity = Problem.class)
+    public void delete(@SuppressWarnings("unused") Integer userId, Integer id) {
         problemRepository.deleteById(id);
     }
 }
