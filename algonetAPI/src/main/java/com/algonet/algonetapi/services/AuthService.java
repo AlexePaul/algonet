@@ -5,6 +5,7 @@ import com.algonet.algonetapi.exceptions.NotFoundException;
 import com.algonet.algonetapi.exceptions.WrongAuthException;
 import com.algonet.algonetapi.models.dto.userDTOs.UserCreationDTO;
 import com.algonet.algonetapi.models.dto.userDTOs.UserLoginDTO;
+import com.algonet.algonetapi.models.dto.userDTOs.UserResponseDTO;
 import com.algonet.algonetapi.models.entities.User;
 import com.algonet.algonetapi.repositories.UserRepository;
 import com.algonet.algonetapi.utils.JwtUtil;
@@ -61,5 +62,10 @@ public class AuthService {
         user.setRole("UPLOADER");
         userRepository.save(user);
         return user;
+    }
+
+    public UserResponseDTO getUser(User user) {
+        UserResponseDTO userResponseDTO = new UserResponseDTO(user.getUsername(), user.getEmail(), user.getRole(), user.getCreatedAt());
+        return userResponseDTO;
     }
 }

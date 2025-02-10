@@ -1,0 +1,59 @@
+/* Use global color variables */
+@import "./colors.css";
+
+.header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background-color: var(--secondary-color); 
+    color: var(--text-color);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 20px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+  }
+  
+  /* Title */
+  .link h1 {
+    margin: 0;
+    font-size: 24px;
+  }
+  
+  .loggedIn{
+    display: flex;
+    align-items: center;
+    margin-right: 5%;
+  }
+  .loggedIn p{
+    margin-right: 20px;
+  }
+
+  /* Logout button */
+  .header button {
+    background-color: var(--card-background);
+    color: var(--text-color);
+    border: none;
+    padding: 8px 15px;
+    font-size: 16px;
+    border-radius: 5px;
+    margin-right:2%;
+    cursor: pointer;
+    transition: background 0.3s ease;
+  }
+
+  .link{
+    color: var(--text-color);
+    text-decoration: none;
+    font-size: large;
+    font-weight: bold;
+    margin: 0;
+    font-size: 24px;
+  }
+  
+  .header button:hover {
+    background-color: var(--primary-color);
+  }
+  

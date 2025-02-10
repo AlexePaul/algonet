@@ -1,7 +1,9 @@
 package com.algonet.algonetapi.controllers;
 
+import com.algonet.algonetapi.annotations.GetAuthUser;
 import com.algonet.algonetapi.models.dto.userDTOs.UserCreationDTO;
 import com.algonet.algonetapi.models.dto.userDTOs.UserLoginDTO;
+import com.algonet.algonetapi.models.dto.userDTOs.UserResponseDTO;
 import com.algonet.algonetapi.models.entities.User;
 import com.algonet.algonetapi.services.AuthService;
 import lombok.AllArgsConstructor;
@@ -23,6 +25,11 @@ public class AuthController {
     @PostMapping("/login")
     public ResponseEntity<String> login(@RequestBody UserLoginDTO userLoginDTO){
         return new ResponseEntity<>(authService.login(userLoginDTO), HttpStatus.OK);
+    }
+
+    @GetMapping("")
+    public ResponseEntity<UserResponseDTO> getUser(@GetAuthUser User user){
+        return new ResponseEntity<>(authService.getUser(user), HttpStatus.OK);
     }
 
     @PutMapping("/makeUploader")
