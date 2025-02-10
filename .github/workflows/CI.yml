@@ -14,7 +14,14 @@ jobs:
       # Checkout the repository
       - name: Checkout code
         uses: actions/checkout@v4
-
+      - name: Create .env file
+        run: |
+          echo "DB_URL=${{ secrets.DB_URL }}" > algonetAPI/.env
+          echo "DB_USERNAME=${{ secrets.DB_USERNAME }}" >> algonetAPI/.env
+          echo "DB_PASSWORD=${{ secrets.DB_PASSWORD }}" >> algonetAPI/.env
+          echo "SS_USERNAME=${{ secrets.SS_USERNAME }}" >> algonetAPI/.env
+          echo "SS_PASSWORD=${{ secrets.SS_PASSWORD }}" >> algonetAPI/.env
+    
       # Set up Java 21 with the Temurin distribution
       - name: Set up JDK 21
         uses: actions/setup-java@v3
