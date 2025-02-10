@@ -18,7 +18,7 @@ import java.time.Instant;
 @AllArgsConstructor
 @RequestMapping("/api/v1/problem")
 public class ProblemController {
-    private ProblemService problemService;
+    private final ProblemService problemService;
 
     @PostMapping("")
     public ResponseEntity<Problem> create(@Parameter(hidden = true) @GetAuthUser User user, @RequestBody ProblemCreationDTO problemCreationDTO){
@@ -32,12 +32,12 @@ public class ProblemController {
 
     @PutMapping("/{id}")
     public ResponseEntity<Problem> update(@Parameter(hidden = true) @GetAuthUser User user, @PathVariable Integer id, @RequestBody ProblemPatchDTO problemPatchDTO){
-        return new ResponseEntity<>(problemService.update(user, id, problemPatchDTO), HttpStatus.OK);
+        return new ResponseEntity<>(problemService.update(user.getId(), id, problemPatchDTO), HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> delete(@Parameter(hidden = true) @GetAuthUser User user, @PathVariable Integer id){
-        problemService.delete(user, id);
+        problemService.delete(user.getId(), id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }

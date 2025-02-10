@@ -1,6 +1,5 @@
 package com.algonet.algonetapi.unit;
 
-import com.algonet.algonetapi.exceptions.UnauthorizedException;
 import com.algonet.algonetapi.models.dto.ProblemRatingDTOs.ProblemRatingUpdateDTO;
 import com.algonet.algonetapi.models.entities.*;
 import com.algonet.algonetapi.repositories.ProblemRatingRepository;
@@ -42,7 +41,7 @@ class ProblemRatingServiceTest {
         User user = new User();
         user.setId(1);
 
-        ProblemRatingUpdateDTO problemRatingUpdateDTO = new ProblemRatingUpdateDTO(2,3,5);
+        ProblemRatingUpdateDTO problemRatingUpdateDTO = new ProblemRatingUpdateDTO(3,5);
 
         Problem problem = new Problem();
         problem.setId(2);
@@ -58,19 +57,19 @@ class ProblemRatingServiceTest {
         ProblemRatingId problemRatingId = new ProblemRatingId(user.getId(), problemRatingUpdateDTO.getTagId());
         problemRating.setId(problemRatingId);
 
-        when(entityManager.getReference(Problem.class,problemRatingUpdateDTO.getProblemId())).thenReturn(problem);
+        when(entityManager.getReference(Problem.class,2)).thenReturn(problem);
         when(entityManager.getReference(Tag.class,problemRatingUpdateDTO.getTagId())).thenReturn(tag);
-        when(problemRatingRepository.findByProblemIdAndTagId(problemRatingUpdateDTO.getProblemId(), problemRatingUpdateDTO.getTagId())).thenReturn(Optional.empty());
+        when(problemRatingRepository.findByProblemIdAndTagId(2, problemRatingUpdateDTO.getTagId())).thenReturn(Optional.empty());
         when(problemRatingRepository.save(any(ProblemRating.class)))
                 .thenAnswer(invocation -> invocation.getArgument(0));
 
-        ProblemRating newProblemRating = problemRatingService.update(user, problemRatingUpdateDTO);
+        ProblemRating newProblemRating = problemRatingService.update(user.getId(),2, problemRatingUpdateDTO);
 
         assertEquals(problemRating, newProblemRating);
 
         verify(problemRatingRepository, times(1)).save(any());
         verify(problemRatingRepository, times(1)).findByProblemIdAndTagId(any(), any());
-        verify(entityManager, times(3)).getReference(any(), any());
+        verify(entityManager, times(2)).getReference(any(), any());
     }
     @Test
     @DisplayName("Updating a rating to a problem successfully")
@@ -78,7 +77,7 @@ class ProblemRatingServiceTest {
         User user = new User();
         user.setId(1);
 
-        ProblemRatingUpdateDTO problemRatingUpdateDTO = new ProblemRatingUpdateDTO(2,3,5);
+        ProblemRatingUpdateDTO problemRatingUpdateDTO = new ProblemRatingUpdateDTO(3,5);
 
         Problem problem = new Problem();
         problem.setId(2);
@@ -94,13 +93,13 @@ class ProblemRatingServiceTest {
         ProblemRatingId problemRatingId = new ProblemRatingId(user.getId(), problemRatingUpdateDTO.getTagId());
         problemRating.setId(problemRatingId);
 
-        when(entityManager.getReference(Problem.class,problemRatingUpdateDTO.getProblemId())).thenReturn(problem);
+        when(entityManager.getReference(Problem.class,2)).thenReturn(problem);
         when(entityManager.getReference(Tag.class,problemRatingUpdateDTO.getTagId())).thenReturn(tag);
-        when(problemRatingRepository.findByProblemIdAndTagId(problemRatingUpdateDTO.getProblemId(), problemRatingUpdateDTO.getTagId())).thenReturn(Optional.of(problemRating));
+        when(problemRatingRepository.findByProblemIdAndTagId(2, problemRatingUpdateDTO.getTagId())).thenReturn(Optional.of(problemRating));
         when(problemRatingRepository.save(any(ProblemRating.class)))
                 .thenAnswer(invocation -> invocation.getArgument(0));
 
-        ProblemRating newProblemRating = problemRatingService.update(user, problemRatingUpdateDTO);
+        ProblemRating newProblemRating = problemRatingService.update(user.getId(),2, problemRatingUpdateDTO);
 
         assertEquals(problemRating, newProblemRating);
         assertEquals(5, newProblemRating.getRating());
@@ -108,32 +107,7 @@ class ProblemRatingServiceTest {
 
         verify(problemRatingRepository, times(1)).save(any());
         verify(problemRatingRepository, times(1)).findByProblemIdAndTagId(any(), any());
-        verify(entityManager, times(3)).getReference(any(), any());
-    }
-
-    @Test
-    @DisplayName("Updating a rating to a problem unsuccessfully, wrong user")
-    void addRatingToProblemWrongUser() {
-        User user = new User();
-        user.setId(1);
-
-        ProblemRatingUpdateDTO problemRatingUpdateDTO = new ProblemRatingUpdateDTO(2,3,5);
-
-        Problem problem = new Problem();
-        problem.setId(2);
-        problem.setAuthor(new User());
-
-        //noinspection WriteOnlyObject
-        Tag tag = new Tag();
-        tag.setId(3);
-
-        when(entityManager.getReference(Problem.class,problemRatingUpdateDTO.getProblemId())).thenReturn(problem);
-
-        assertThrows(UnauthorizedException.class, () -> problemRatingService.update(user, problemRatingUpdateDTO));
-
-        verify(problemRatingRepository, times(0)).save(any());
-        verify(problemRatingRepository, times(0)).findByProblemIdAndTagId(any(), any());
-        verify(entityManager, times(1)).getReference(any(), any());
+        verify(entityManager, times(2)).getReference(any(), any());
     }
 
     @Test
@@ -142,16 +116,13 @@ class ProblemRatingServiceTest {
         User user = new User();
         user.setId(1);
 
-        // problemId is null
-        ProblemRatingUpdateDTO problemRatingUpdateDTOPID = new ProblemRatingUpdateDTO(null,3,5);
         // tagId is null
-        ProblemRatingUpdateDTO problemRatingUpdateDTOTID = new ProblemRatingUpdateDTO(2,null,5);
+        ProblemRatingUpdateDTO problemRatingUpdateDTOTID = new ProblemRatingUpdateDTO(null,5);
         // rating is null
-        ProblemRatingUpdateDTO problemRatingUpdateDTOR = new ProblemRatingUpdateDTO(2,3,null);
+        ProblemRatingUpdateDTO problemRatingUpdateDTOR = new ProblemRatingUpdateDTO(3,null);
 
-        assertThrows(IllegalArgumentException.class, () -> problemRatingService.update(user, problemRatingUpdateDTOPID));
-        assertThrows(IllegalArgumentException.class, () -> problemRatingService.update(user, problemRatingUpdateDTOTID));
-        assertThrows(IllegalArgumentException.class, () -> problemRatingService.update(user, problemRatingUpdateDTOR));
+        assertThrows(IllegalArgumentException.class, () -> problemRatingService.update(user.getId(),2, problemRatingUpdateDTOTID));
+        assertThrows(IllegalArgumentException.class, () -> problemRatingService.update(user.getId(),2, problemRatingUpdateDTOR));
 
         verify(problemRatingRepository, times(0)).save(any());
         verify(problemRatingRepository, times(0)).findByProblemIdAndTagId(any(), any());

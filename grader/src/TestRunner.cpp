@@ -94,9 +94,8 @@ void TestRunner::runTests(int solutionId) {
   }
 
   // Display test summary
-  // std::cout << "Solution ID " << solutionId << ": Passed " << passedTests <<
-  // "/"
-  //<< tests.size() << " tests.\n";
+  std::cout << "Solution ID " << solutionId << ": Passed " << passedTests << "/"
+            << tests.size() << " tests.\n";
 }
 
 void TestRunner::main() {

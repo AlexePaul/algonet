@@ -1,0 +1,22 @@
+:root{
+  --primary-color: #1E90FF;
+  --secondary-color: #0F4C75;
+  --background-color: #121212;
+  --card-background: #1E1E1E;
+  --text-color: #E0E0E0;
+  --secondary-text: #A0A0A0;
+  --error-color: red;
+}
+
+@media (prefers-color-scheme: light) {
+    :root {
+      --primary-color: #007bff;
+      --secondary-color: #0056b3;
+      --background-color: #ffffff;
+      --card-background: #f4f4f4;
+      --text-color: #333333;
+      --secondary-text: #666666;
+      --error-color: #dc3545;
+    }
+    
+  }

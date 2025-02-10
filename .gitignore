@@ -69,7 +69,6 @@ CMakeUserPresets.json
 *.exe
 
 # Ignore temporary files
-*.log
 *.tmp
 *.bak
 *.swp

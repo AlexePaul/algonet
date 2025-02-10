@@ -75,7 +75,7 @@ class SolutionServiceTest {
         solution.setId(1);
         when(solutionRepository.findById(1)).thenReturn(java.util.Optional.of(solution));
 
-        Solution gottenSolution = solutionService.get(1);
+        Solution gottenSolution = solutionService.get(1,1);
 
         assertEquals(solution, gottenSolution);
     }

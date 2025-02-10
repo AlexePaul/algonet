@@ -16,9 +16,9 @@ import org.springframework.web.bind.annotation.*;
 public class ProblemRatingController {
     private final ProblemRatingService problemRatingService;
 
-    @PutMapping("")
-    public ResponseEntity<?> update(@Parameter(hidden = true) @GetAuthUser User user, @RequestBody ProblemRatingUpdateDTO problemRatingUpdateDTO){
-        return new ResponseEntity<>(problemRatingService.update(user, problemRatingUpdateDTO), HttpStatus.OK);
+    @PutMapping("/{id}")
+    public ResponseEntity<?> update(@Parameter(hidden = true) @GetAuthUser User user, @PathVariable Integer id, @RequestBody ProblemRatingUpdateDTO problemRatingUpdateDTO){
+        return new ResponseEntity<>(problemRatingService.update(user.getId(), id, problemRatingUpdateDTO), HttpStatus.OK);
     }
 
     @GetMapping("/{id}")

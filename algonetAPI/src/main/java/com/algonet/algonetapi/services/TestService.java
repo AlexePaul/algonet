@@ -1,5 +1,6 @@
 package com.algonet.algonetapi.services;
 
+import com.algonet.algonetapi.annotations.CheckOwn;
 import com.algonet.algonetapi.exceptions.NotFoundException;
 import com.algonet.algonetapi.models.dto.testDTOs.TestCreationDTO;
 import com.algonet.algonetapi.models.entities.Problem;
@@ -19,8 +20,8 @@ public class TestService {
 
     private final TestRepository testRepository;
     private final EntityManager entityManager;
-
-    public Test create(Integer problem_id, TestCreationDTO testCreationDTO) {
+    @CheckOwn(entity = Problem.class)
+    public Test create(@SuppressWarnings("unused") Integer userId, Integer problem_id, TestCreationDTO testCreationDTO) {
         Test test = new Test();
 
         // Use EntityManager.getReference() to get a reference to the Problem entity
@@ -31,23 +32,23 @@ public class TestService {
         test.setOutput(testCreationDTO.getOutput());
         return testRepository.save(test);
     }
-
-    public Test get(Integer id) {
+    @CheckOwn(entity = Test.class)
+    public Test get(@SuppressWarnings("unused") Integer userId, Integer id) {
         return testRepository.findById(id).orElseThrow(NotFoundException::new);
     }
-
-    public Test update(Integer id, TestCreationDTO testCreationDTO) {
+    @CheckOwn(entity = Test.class)
+    public Test update(@SuppressWarnings("unused") Integer userId, Integer id, TestCreationDTO testCreationDTO) {
         Test test = testRepository.findById(id).orElseThrow(NotFoundException::new);
         test.setInput(testCreationDTO.getInput());
         test.setOutput(testCreationDTO.getOutput());
         return testRepository.save(test);
     }
-
-    public void delete(Integer id) {
+    @CheckOwn(entity = Test.class)
+    public void delete(@SuppressWarnings("unused") Integer userId, Integer id) {
         testRepository.deleteById(id);
     }
-
-    public List<Test> getAll(Integer problem_id) {
+    @CheckOwn(entity = Problem.class)
+    public List<Test> getAll(@SuppressWarnings("unused") Integer userId, Integer problem_id) {
         return testRepository.findAllByProblem_id(problem_id);
     }
 }

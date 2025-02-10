@@ -1,5 +1,5 @@
 # algonet
-
+[![Integration Testing](https://github.com/AlexePaul/algonet/actions/workflows/CI.yml/badge.svg?branch=main&event=push)](https://github.com/AlexePaul/algonet/actions/workflows/CI.yml)
 ### Database ERD
 
 ![screenshot](./algonetAPI/databaseCreationAndInsertion/Database%20Diagram.png)
