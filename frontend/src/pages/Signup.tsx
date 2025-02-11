@@ -1,12 +1,13 @@
-import { useContext, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import styles from "./Signup.module.css"; // ✅ Use CSS Module
-import { AuthContext } from "../context/AuthContext";
+import { useContext, useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import styles from './Signup.module.css'; // ✅ Use CSS Module
+import { AuthContext } from '../context/AuthContext';
+import { login, signup } from '../services/authService';
 
 function Signup() {
-  const [email, setEmail] = useState<string>("");
-  const [username, setUsername] = useState<string>("");
-  const [password, setPassword] = useState<string>("");
+  const [email, setEmail] = useState<string>('');
+  const [username, setUsername] = useState<string>('');
+  const [password, setPassword] = useState<string>('');
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
 
@@ -14,28 +15,27 @@ function Signup() {
   const auth = useContext(AuthContext);
 
   const handleLogin = async () => {
+    setError(null);
+    setLoading(true);
+
+    if (!username || !password) {
+      setError('Both fields are required');
+      setLoading(false);
+      return;
+    }
+
+    setUsername(username.trim());
+    setPassword(password.trim());
     try {
-      const response = await fetch("http://localhost:8080/api/v1/auth/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        credentials: "include",
-        body: JSON.stringify({ username, password }),
-      });
-
-      if (!response.ok) {
-        throw new Error("Invalid credentials");
-      }
-
-      const data = await response.text();
-      console.log(data);
-      auth?.setToken(data);
-      setUsername("");
-      setPassword("");
-      navigate("/");
+      var token = await login(username, password);
+      setUsername('');
+      setPassword('');
+      auth?.setToken(token);
+      navigate('/');
     } catch (err) {
-      setError(err as string);
+      setError(err instanceof Error ? err.message : 'Login failed');
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -45,7 +45,7 @@ function Signup() {
     setLoading(true);
 
     if (!email || !username || !password) {
-      setError("All fields are required");
+      setError('All fields are required');
       setLoading(false);
       return;
     }
@@ -54,25 +54,16 @@ function Signup() {
       setUsername(username.trim());
       setPassword(password.trim());
       setEmail(email.trim());
-      const response = await fetch(
-        "http://localhost:8080/api/v1/auth/register",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ email, username, password }),
-        }
-      );
+      const response = await signup(email, username, password);
 
       if (!response.ok) {
-        throw new Error("Failed to sign up");
+        throw new Error('Failed to sign up');
       }
 
       handleLogin();
-      setEmail("");
-      setUsername("");
-      setPassword("");
+      setEmail('');
+      setUsername('');
+      setPassword('');
     } catch (err) {
       setError(err as string);
     } finally {
@@ -115,8 +106,9 @@ function Signup() {
         <button
           type="submit"
           disabled={loading}
-          className={styles.signupButton}>
-          {loading ? "Signing up..." : "Sign Up"}
+          className={styles.signupButton}
+        >
+          {loading ? 'Signing up...' : 'Sign Up'}
         </button>
         <div className={styles.signUp}>
           <p>Already have an account?</p>

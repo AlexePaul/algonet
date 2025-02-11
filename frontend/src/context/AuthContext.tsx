@@ -1,5 +1,6 @@
-import { createContext, useState, useEffect, ReactNode } from "react";
-import { user } from "../types";
+import { createContext, useState, useEffect, ReactNode } from 'react';
+import { user } from '../types';
+import { getUser } from '../services/authService.tsx';
 
 // Define the context type
 interface AuthContextType {
@@ -13,7 +14,7 @@ export const AuthContext = createContext<AuthContextType | null>(null);
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [token, setToken] = useState<string | null>(
-    localStorage.getItem("token")
+    localStorage.getItem('token')
   );
   const [user, setUser] = useState<user | null>(null);
 
@@ -22,15 +23,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       return;
     }
     try {
-      const response = await fetch("http://localhost:8080/api/v1/auth", {
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
-        credentials: "include",
-      });
-      const data = await response.json();
+      var data = await getUser(token);
       setUser(data);
     } catch (err) {
       console.error(err);
@@ -46,16 +39,16 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, [token]);
 
   useEffect(() => {
-    const storedToken = localStorage.getItem("token");
+    const storedToken = localStorage.getItem('token');
     setToken(storedToken);
   }, []);
 
   const updateToken = (newToken: string | null) => {
     if (newToken) {
-      localStorage.setItem("token", newToken);
+      localStorage.setItem('token', newToken);
       setToken(newToken);
     } else {
-      localStorage.removeItem("token");
+      localStorage.removeItem('token');
       setToken(newToken);
     }
   };

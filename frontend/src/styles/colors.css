@@ -9,14 +9,14 @@
 }
 
 @media (prefers-color-scheme: light) {
-    :root {
-      --primary-color: #007bff;
-      --secondary-color: #0056b3;
-      --background-color: #ffffff;
-      --card-background: #f4f4f4;
-      --text-color: #333333;
-      --secondary-text: #666666;
-      --error-color: #dc3545;
-    }
+  :root {
+    --primary-color: #62B1FF;  /* Darker blue for contrast */
+  --secondary-color: #14708a; /* Keeping it the same */
+    --background-color: #FFFFFF; /* Light background */
+    --card-background: #F5F5F5; /* Light gray for cards */
+    --text-color: #212121; /* Dark text for readability */
+    --secondary-text: #555555; /* Softer dark gray */
+    --error-color: red; /* Keeping it the same */
+  }
     
   }

@@ -7,7 +7,7 @@
     left: 0;
     width: 100%;
     background-color: var(--secondary-color); 
-    color: var(--text-color);
+    color: #f4f4f4;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -32,6 +32,10 @@
     margin-left: 10px;
     margin-right: 10px;
   }
+
+  .container p {
+    text-wrap: nowrap;
+  }
     
 
   /* Logout button */
@@ -50,7 +54,7 @@
   .link{
     display: flex;
     text-wrap: nowrap;
-    color: var(--text-color);
+    color: #f4f4f4;
     text-decoration: none;
     font-size: large;
     font-weight: bold;

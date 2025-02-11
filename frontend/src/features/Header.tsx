@@ -1,13 +1,13 @@
-import { useContext } from "react";
-import styles from "./Header.module.css";
-import { AuthContext } from "../context/AuthContext";
-import { Link } from "react-router-dom";
+import { useContext } from 'react';
+import styles from './Header.module.css';
+import { AuthContext } from '../context/AuthContext';
+import { Link } from 'react-router-dom';
 
 function Header() {
   const auth = useContext(AuthContext);
 
   const handleLogout = () => {
-    console.log("Logging out...");
+    console.log('Logging out...');
     auth?.setToken(null);
   };
 
@@ -20,7 +20,7 @@ function Header() {
         {auth?.token && (
           <>
             <p>
-              Hello, <br /> <b>{auth?.user?.username}</b>
+              Hello, <b>{auth?.user?.username}</b>
             </p>
             <button onClick={handleLogout}>Logout</button>
           </>
