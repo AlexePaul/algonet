@@ -1,5 +1,5 @@
 import { useContext, useState } from "react";
-import "../styles/Login.css";
+import styles from "./Login.module.css";
 import { AuthContext } from "../context/AuthContext";
 import { Link, useNavigate } from "react-router-dom";
 
@@ -23,6 +23,8 @@ function Login() {
     }
 
     try {
+      setUsername(username.trim());
+      setPassword(password.trim());
       const response = await fetch("http://localhost:8080/api/v1/auth/login", {
         method: "POST",
         headers: {
@@ -50,11 +52,10 @@ function Login() {
   };
 
   return (
-    <div className="login-container">
-      <form onSubmit={handleLogin} className="login-form">
+    <div className={styles.loginContainer}>
+      <form onSubmit={handleLogin} className={styles.loginForm}>
         <h2>Login</h2>
-        {error && <p className="error-text">{error}</p>}
-
+        {error && <p className={styles.errorText}>{error}</p>}
         <label>
           Username:
           <input
@@ -64,7 +65,6 @@ function Login() {
             required
           />
         </label>
-
         <label>
           Password:
           <input
@@ -74,13 +74,12 @@ function Login() {
             required
           />
         </label>
-
-        <button type="submit" disabled={loading}>
+        <button type="submit" disabled={loading} className={styles.loginButton}>
           {loading ? "Logging in..." : "Login"}
         </button>
-        <div className="signUp">
+        <div className={styles.signUp}>
           <p>Don't have an account?</p>
-          <Link className="link" to="/signup">
+          <Link className={styles.link} to="/signup">
             Sign up
           </Link>
         </div>

@@ -1,0 +1,53 @@
+@import "../styles/colors.css";
+/* General Page Styling */
+.title {
+    text-align: center;
+    font-size: 2rem;
+    color: var(--text-color, #333);
+    margin-bottom: 1rem;
+  }
+  
+  /* Error Message */
+  .error {
+    color: var(--error-color, red);
+    text-align: center;
+    font-size: 1.2rem;
+    margin-top: 1rem;
+  }
+  
+  /* Grid for Tag Items */
+  .itemList {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 16px;
+    padding: 20px;
+    max-width: 900px;
+    margin: 0 auto;
+  }
+  
+  /* Individual Tag Card */
+  .itemCard {
+    background-color: var(--card-background, #fff);
+    border-radius: 10px;
+    padding: 15px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    font-size: 1.1rem;
+    font-weight: bold;
+    color: var(--text-color, #333);
+    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+  }
+  
+  /* Hover effect */
+  .itemCard:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
+  }
+  
+  /* Responsive */
+  @media (max-width: 600px) {
+    .itemList {
+      grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    }
+  }
+  

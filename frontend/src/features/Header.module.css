@@ -1,5 +1,5 @@
 /* Use global color variables */
-@import "./colors.css";
+@import "../styles/colors.css";
 
 .header {
     position: fixed;
@@ -22,14 +22,17 @@
     font-size: 24px;
   }
   
-  .loggedIn{
+  .container{
     display: flex;
     align-items: center;
     margin-right: 5%;
   }
-  .loggedIn p{
-    margin-right: 20px;
+  .container p,
+  .container button {
+    margin-left: 10px;
+    margin-right: 10px;
   }
+    
 
   /* Logout button */
   .header button {
@@ -45,6 +48,8 @@
   }
 
   .link{
+    display: flex;
+    text-wrap: nowrap;
     color: var(--text-color);
     text-decoration: none;
     font-size: large;

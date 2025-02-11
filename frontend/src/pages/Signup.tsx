@@ -1,6 +1,6 @@
 import { useContext, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import "../styles/Signup.css";
+import styles from "./Signup.module.css"; // ✅ Use CSS Module
 import { AuthContext } from "../context/AuthContext";
 
 function Signup() {
@@ -51,6 +51,9 @@ function Signup() {
     }
 
     try {
+      setUsername(username.trim());
+      setPassword(password.trim());
+      setEmail(email.trim());
       const response = await fetch(
         "http://localhost:8080/api/v1/auth/register",
         {
@@ -78,11 +81,10 @@ function Signup() {
   };
 
   return (
-    <div className="login-container">
-      <form onSubmit={handleSignup} className="login-form">
+    <div className={styles.signupContainer}>
+      <form onSubmit={handleSignup} className={styles.signupForm}>
         <h2>Sign Up</h2>
-        {error && <p className="error-text">{error}</p>}
-
+        {error && <p className={styles.errorText}>{error}</p>}
         <label>
           Email:
           <input
@@ -92,7 +94,6 @@ function Signup() {
             required
           />
         </label>
-
         <label>
           Username:
           <input
@@ -102,7 +103,6 @@ function Signup() {
             required
           />
         </label>
-
         <label>
           Password:
           <input
@@ -112,14 +112,15 @@ function Signup() {
             required
           />
         </label>
-
-        <button type="submit" disabled={loading}>
+        <button
+          type="submit"
+          disabled={loading}
+          className={styles.signupButton}>
           {loading ? "Signing up..." : "Sign Up"}
         </button>
-
-        <div className="signUp">
+        <div className={styles.signUp}>
           <p>Already have an account?</p>
-          <Link className="link" to="/login">
+          <Link className={styles.link} to="/login">
             Login
           </Link>
         </div>

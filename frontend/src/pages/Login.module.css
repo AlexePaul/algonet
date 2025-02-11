@@ -1,7 +1,7 @@
-@import "./colors.css"; /* Import color variables */
+@import "../styles/colors.css"; /* Import color variables */
 
 /* Center the form */
-.login-container {
+.loginContainer {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -10,7 +10,7 @@
 }
   
 /* Form box */
-.login-form {
+.loginForm {
     background: var(--card-background);
     padding: 20px;
     border-radius: 10px;
@@ -20,13 +20,13 @@
 }
   
 /* Title */
-.login-form h2 {
+.loginForm h2 {
     margin-bottom: 15px;
     color: var(--text-color);
 }
   
 /* Inputs */
-.login-form label {
+.loginForm label {
     display: block;
     text-align: left;
     width:100%;
@@ -35,7 +35,7 @@
     color: var(--text-color);
 }
   
-.login-form input {
+.loginForm input {
     box-sizing: border-box;
     width: 100%;
     padding: 8px;
@@ -46,7 +46,7 @@
 }
   
 /* Button */
-.login-form button {
+.loginForm button {
     width: 100%;
     margin-top: 15px;
     padding: 10px;
@@ -60,12 +60,12 @@
     transition: background 0.3s ease;
 }
   
-.login-form button:hover {
+.loginForm button:hover {
     background: var(--primary-color);
 }
   
 /* Error text */
-.error-text {
+.errorText {
     color: var(--error-color);
     font-size: 14px;
     margin-bottom: 10px;
@@ -89,7 +89,7 @@
 }
 
 @media (max-width: 1000px) {
-    .login-form {
+    .loginForm {
         width: 60%;
     }
     
