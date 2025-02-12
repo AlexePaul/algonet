@@ -8,6 +8,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Home from './pages/Home';
 import Dashboard from './pages/Dashboard';
 import TagPage from './pages/TagPage';
+import ProblemPage from './pages/ProblemPage';
 
 function App() {
   const auth = useContext(AuthContext);
@@ -21,6 +22,7 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
           <Route path="/tag/:tagName" element={<TagPage />} />
+          <Route path="/problem/:problemId" element={<ProblemPage />} />
         </Routes>
       </Router>
     </>

@@ -1,27 +1,28 @@
-import { useParams, useLocation } from 'react-router-dom';
+import { useParams, useLocation, useNavigate } from 'react-router-dom';
 import styles from './TagPage.module.css';
 import { useContext, useEffect, useState } from 'react';
 import { AuthContext } from '../context/AuthContext';
 import { fetchProblems } from '../services/problemService';
-import { problem } from '../types';
+import { problemPreview } from '../types';
 
 function TagPage() {
   const { tagName } = useParams(); // Get the tagName from the URL
   const auth = useContext(AuthContext);
-  const [problems, setProblems] = useState<problem[]>([]);
+  const [problems, setProblems] = useState<problemPreview[]>([]);
   const location = useLocation();
   const tagId = location.state?.tagId;
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
+  const navigate = useNavigate();
 
   function handleClick(
     event: React.MouseEvent<HTMLDivElement, MouseEvent>
   ): void {
-    const itemId = event.currentTarget.getAttribute('data-id');
-    if (itemId) {
-      console.log(`Item with ID ${itemId} clicked`);
-      // You can add more logic here, such as navigating to a detail page or updating state
-    }
+    const input = event.currentTarget.querySelector('h3')?.innerText;
+    const match = input?.match(/@(\d+)$/);
+    const id = match ? parseInt(match[1], 10) : null;
+    console.log(id);
+    navigate(`/problem/${id}`);
   }
 
   function truncateText(text: string, maxLength: number): string {
