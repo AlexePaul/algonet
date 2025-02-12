@@ -1,13 +1,15 @@
 import { useContext } from 'react';
 import styles from './Header.module.css';
 import { AuthContext } from '../context/AuthContext';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 function Header() {
   const auth = useContext(AuthContext);
+  const navigate = useNavigate();
 
   const handleLogout = () => {
     console.log('Logging out...');
+    navigate('/');
     auth?.setToken(null);
   };
 

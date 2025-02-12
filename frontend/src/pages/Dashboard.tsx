@@ -1,6 +1,7 @@
 import { useContext, useEffect, useState } from 'react';
 import styles from './Dashboard.module.css';
-import { fetchTags, tag } from '../services/tagService';
+import { fetchTags } from '../services/tagService';
+import { tag } from '../types';
 import { AuthContext } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 
@@ -29,7 +30,11 @@ function Dashboard() {
   }, []);
 
   const handleClick = (event: any) => {
-    navigate(`/tag/${event.target.innerText}`);
+    const tagName = event.target.innerText.trim(); // Get the text inside the div
+    const tagId = tags.find((tag) => tag.name === tagName)?.id;
+
+    // Navigate while passing tagId as state
+    navigate(`/tag/${tagName}`, { state: { tagId } });
   };
 
   if (loading) return <p>Loading...</p>;

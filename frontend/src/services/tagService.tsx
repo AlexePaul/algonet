@@ -1,10 +1,5 @@
 import { API_BASE_URL } from '../constants';
-
-// src/services/apiService.ts
-export interface tag {
-  id: number;
-  name: string;
-}
+import { tag } from '../types';
 
 export const fetchTags = async (token: String): Promise<tag[]> => {
   try {

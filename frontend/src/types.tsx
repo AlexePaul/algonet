@@ -4,3 +4,14 @@ export type user = {
   role: string;
   createdAt: string;
 };
+
+export interface tag {
+  id: number;
+  name: string;
+}
+
+export type problem = {
+  id: number;
+  title: string;
+  body: string;
+};
