@@ -13,12 +13,13 @@ import java.util.List;
 
 @RestController
 @AllArgsConstructor
-@RequestMapping("/api/v1/tag")
+@RequestMapping("/api/v1/tags")
 public class TagController {
-    private final TagService tagService;
-
-    @GetMapping("")
-    public ResponseEntity<List<Tag>> getAll(){
+    private final TagService tagService;    @GetMapping("")
+    public ResponseEntity<List<Tag>> getAll(@RequestParam(required = false) String name){
+        if (name != null) {
+            return new ResponseEntity<>(tagService.getByName(name), HttpStatus.OK);
+        }
         return new ResponseEntity<>(tagService.getAll(), HttpStatus.OK);
     }
     @GetMapping("/{id}")

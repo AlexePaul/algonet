@@ -3,28 +3,30 @@ package com.algonet.algonetapi.unit;
 import com.algonet.algonetapi.models.dto.UserRatingDTOs.UserRatingUpdateDTO;
 import com.algonet.algonetapi.models.entities.Tag;
 import com.algonet.algonetapi.models.entities.User;
-import com.algonet.algonetapi.models.entities.UserRating;
-import com.algonet.algonetapi.models.entities.UserRatingId;
-import com.algonet.algonetapi.repositories.UserRatingRepository;
+import com.algonet.algonetapi.models.entities.UserTagRating;
+import com.algonet.algonetapi.repositories.UserTagRatingRepository;
 import com.algonet.algonetapi.services.UserRatingService;
 import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.assertj.core.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
+@ExtendWith(MockitoExtension.class)
 class UserRatingServiceTest {
 
     @Mock
-    private UserRatingRepository userRatingRepository;
+    private UserTagRatingRepository userTagRatingRepository;
 
     @Mock
     private EntityManager entityManager;
@@ -32,94 +34,111 @@ class UserRatingServiceTest {
     @InjectMocks
     private UserRatingService userRatingService;
 
+    private User testUser;
+    private Tag testTag;
+    private UserTagRating testRating;
+    private UserRatingUpdateDTO updateDTO;
+
     @BeforeEach
     void setUp() {
-        MockitoAnnotations.openMocks(this);
+        testUser = new User();
+        testUser.setId(1);
+        testUser.setUsername("testuser");
+        testUser.setTags(new ArrayList<>());
+
+        testTag = new Tag();
+        testTag.setId(1);
+        testTag.setName("algorithms");
+
+        testRating = new UserTagRating();
+        testRating.setId(1);
+        testRating.setUser(testUser);
+        testRating.setTag(testTag);
+        testRating.setRating(85);
+
+        updateDTO = new UserRatingUpdateDTO();
+        updateDTO.setTagId(1);
+        updateDTO.setRating(90);
     }
 
     @Test
-    @DisplayName("Update user rating successfully")
-    void updateUserRatingSuccessfully() {
-        User user = new User();
-        user.setId(1);
+    void update_ShouldCreateNewRating_WhenRatingNotExists() {
+        // Given
+        when(entityManager.getReference(Tag.class, 1)).thenReturn(testTag);
+        when(userTagRatingRepository.findByUserAndTag(testUser, testTag)).thenReturn(Optional.empty());
+        when(userTagRatingRepository.save(any(UserTagRating.class))).thenReturn(testRating);
 
-        Tag tag = new Tag();
-        tag.setId(2);
+        // When
+        UserTagRating result = userRatingService.update(testUser, updateDTO);
 
-        UserRatingUpdateDTO userRatingUpdateDTO = new UserRatingUpdateDTO(2, 5);
-
-        UserRating existingUserRating = new UserRating();
-        existingUserRating.setUser(user);
-        existingUserRating.setTag(tag);
-        existingUserRating.setRating(3);
-        UserRatingId existingUserRatingId = new UserRatingId(user.getId(), tag.getId());
-        existingUserRating.setId(existingUserRatingId);
-
-        when(userRatingRepository.findByUserAndTagId(user, userRatingUpdateDTO.getTagId())).thenReturn(Optional.of(existingUserRating));
-        when(entityManager.getReference(Tag.class, userRatingUpdateDTO.getTagId())).thenReturn(tag);
-        when(userRatingRepository.save(any(UserRating.class))).thenReturn(existingUserRating);
-
-        UserRating updatedUserRating = userRatingService.update(user, userRatingUpdateDTO);
-
-        assertEquals(existingUserRating.getUser(), updatedUserRating.getUser());
-        assertEquals(existingUserRating.getTag(), updatedUserRating.getTag());
-        assertEquals(userRatingUpdateDTO.getRating(), updatedUserRating.getRating());
-        assertEquals(existingUserRating.getId(), updatedUserRating.getId());
-
-        verify(userRatingRepository, times(1)).findByUserAndTagId(user, userRatingUpdateDTO.getTagId());
-        verify(userRatingRepository, times(1)).save(any(UserRating.class));
+        // Then
+        assertThat(result).isNotNull();
+        verify(entityManager).getReference(Tag.class, 1);
+        verify(userTagRatingRepository).findByUserAndTag(testUser, testTag);
+        verify(userTagRatingRepository).save(any(UserTagRating.class));
+        assertThat(testUser.getTags()).contains(testTag);
     }
 
     @Test
-    @DisplayName("Create user rating when not exists")
-    void createUserRatingWhenNotExists() {
-        User user = new User();
-        user.setId(1);
+    void update_ShouldUpdateExistingRating_WhenRatingExists() {
+        // Given
+        when(entityManager.getReference(Tag.class, 1)).thenReturn(testTag);
+        when(userTagRatingRepository.findByUserAndTag(testUser, testTag)).thenReturn(Optional.of(testRating));
+        when(userTagRatingRepository.save(any(UserTagRating.class))).thenReturn(testRating);
+        testUser.getTags().add(testTag); // Tag already exists
 
-        Tag tag = new Tag();
-        tag.setId(2);
+        // When
+        UserTagRating result = userRatingService.update(testUser, updateDTO);
 
-        UserRatingUpdateDTO userRatingUpdateDTO = new UserRatingUpdateDTO(2, 5);
-
-        when(userRatingRepository.findByUserAndTagId(user, userRatingUpdateDTO.getTagId())).thenReturn(Optional.empty());
-        when(entityManager.getReference(Tag.class, userRatingUpdateDTO.getTagId())).thenReturn(tag);
-
-        UserRating newUserRating = new UserRating();
-        newUserRating.setUser(user);
-        newUserRating.setTag(tag);
-        newUserRating.setRating(userRatingUpdateDTO.getRating());
-        UserRatingId newUserRatingId = new UserRatingId(user.getId(), tag.getId());
-        newUserRating.setId(newUserRatingId);
-
-        when(userRatingRepository.save(any(UserRating.class))).thenReturn(newUserRating);
-
-        UserRating createdUserRating = userRatingService.update(user, userRatingUpdateDTO);
-
-        assertEquals(newUserRating.getUser(), createdUserRating.getUser());
-        assertEquals(newUserRating.getTag(), createdUserRating.getTag());
-        assertEquals(userRatingUpdateDTO.getRating(), createdUserRating.getRating());
-        assertEquals(newUserRating.getId(), createdUserRating.getId());
-
-        verify(userRatingRepository, times(1)).findByUserAndTagId(user, userRatingUpdateDTO.getTagId());
-        verify(userRatingRepository, times(1)).save(any(UserRating.class));
+        // Then
+        assertThat(result).isNotNull();
+        verify(entityManager).getReference(Tag.class, 1);
+        verify(userTagRatingRepository).findByUserAndTag(testUser, testTag);
+        verify(userTagRatingRepository).save(testRating);
+        assertThat(testUser.getTags()).hasSize(1);
     }
 
     @Test
-    @DisplayName("Get user ratings successfully")
-    void getUserRatingsSuccessfully() {
-        User user = new User();
-        user.setId(1);
+    void update_ShouldAddTagToUser_WhenTagNotInUserTags() {
+        // Given
+        when(entityManager.getReference(Tag.class, 1)).thenReturn(testTag);
+        when(userTagRatingRepository.findByUserAndTag(testUser, testTag)).thenReturn(Optional.of(testRating));
+        when(userTagRatingRepository.save(any(UserTagRating.class))).thenReturn(testRating);
 
-        UserRating userRating1 = new UserRating();
-        UserRating userRating2 = new UserRating();
-        when(userRatingRepository.findAllByUser(user)).thenReturn(List.of(userRating1, userRating2));
+        // When
+        userRatingService.update(testUser, updateDTO);
 
-        List<UserRating> userRatings = userRatingService.get(user);
+        // Then
+        assertThat(testUser.getTags()).contains(testTag);
+    }
 
-        assertEquals(2, userRatings.size());
-        assertEquals(userRating1, userRatings.get(0));
-        assertEquals(userRating2, userRatings.get(1));
+    @Test
+    void get_ShouldReturnAllUserRatings_WhenRatingsExist() {
+        // Given
+        List<UserTagRating> ratings = List.of(testRating);
+        when(userTagRatingRepository.findAllByUser(testUser)).thenReturn(ratings);
 
-        verify(userRatingRepository, times(1)).findAllByUser(user);
+        // When
+        List<UserTagRating> result = userRatingService.get(testUser);
+
+        // Then
+        assertThat(result).isNotNull();
+        assertThat(result).hasSize(1);
+        assertThat(result).contains(testRating);
+        verify(userTagRatingRepository).findAllByUser(testUser);
+    }
+
+    @Test
+    void get_ShouldReturnEmptyList_WhenNoRatingsExist() {
+        // Given
+        when(userTagRatingRepository.findAllByUser(testUser)).thenReturn(List.of());
+
+        // When
+        List<UserTagRating> result = userRatingService.get(testUser);
+
+        // Then
+        assertThat(result).isNotNull();
+        assertThat(result).isEmpty();
+        verify(userTagRatingRepository).findAllByUser(testUser);
     }
 }

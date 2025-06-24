@@ -16,9 +16,15 @@ import java.util.List;
 @Transactional
 public class TagService {
 
-    private final TagRepository tagRepository;
-    public List<Tag> getAll() {
+    private final TagRepository tagRepository;    public List<Tag> getAll() {
         return tagRepository.findAll();
+    }
+
+    public List<Tag> getByName(String name) {
+        if (name == null || name.trim().isEmpty()) {
+            return tagRepository.findAll();
+        }
+        return tagRepository.findByNameContainingIgnoreCase(name);
     }
 
     public Tag getById(Integer id) {

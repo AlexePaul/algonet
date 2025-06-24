@@ -1,5 +1,6 @@
 package com.algonet.algonetapi.config;
 
+import org.springframework.lang.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
@@ -12,16 +13,14 @@ import java.util.List;
 public class WebConfig implements WebMvcConfigurer {
 
     @Autowired
-    private GetAuthUserArgumentResolver getAuthUserArgumentResolver;
-
-    @Override
-    public void addArgumentResolvers(List<HandlerMethodArgumentResolver> resolvers) {
+    private GetAuthUserArgumentResolver getAuthUserArgumentResolver;    @Override
+    public void addArgumentResolvers(@NonNull List<HandlerMethodArgumentResolver> resolvers) {
         // Register the custom argument resolver
         resolvers.add(getAuthUserArgumentResolver);
     }
 
     @Override
-    public void addCorsMappings(CorsRegistry registry) {
+    public void addCorsMappings(@NonNull CorsRegistry registry) {
         // Configure CORS for all endpoints
         registry.addMapping("/**")
                 .allowedOrigins("http://localhost:5173", "http://78.97.69.149:5173") // Allow only requests from your frontend URL

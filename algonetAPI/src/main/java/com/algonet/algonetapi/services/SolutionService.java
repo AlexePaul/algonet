@@ -45,9 +45,8 @@ public class SolutionService {
         queueService.addSolutionToQueue(solution.getId());
 
         return savedSolution;
-    }
-    @CheckOwn(entity = Solution.class)
-    public Solution get(@SuppressWarnings("unused") Integer userId, Integer id) {
+    }    @CheckOwn(entity = Solution.class)
+    public Solution get(Integer userId, Integer id) {
         return solutionRepository.findById(id).orElseThrow(NotFoundException::new);
     }
 

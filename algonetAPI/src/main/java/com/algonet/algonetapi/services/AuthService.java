@@ -23,8 +23,8 @@ import java.util.Optional;
 @Transactional
 public class AuthService {
 
-    private final UserRepository userRepository;
-
+    private final UserRepository userRepository;    
+    
     public User register(UserCreationDTO userCreationDTO, Instant createdAt) {
         if(userRepository.findByUsername(userCreationDTO.getUsername()).isPresent() || userRepository.findByEmail(userCreationDTO.getEmail()).isPresent())
             throw new AlreadyExistingUserException();

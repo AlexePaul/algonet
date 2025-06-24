@@ -6,6 +6,7 @@ import com.algonet.algonetapi.models.dto.userDTOs.UserLoginDTO;
 import com.algonet.algonetapi.models.dto.userDTOs.UserResponseDTO;
 import com.algonet.algonetapi.models.entities.User;
 import com.algonet.algonetapi.services.AuthService;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,7 +20,7 @@ import java.time.Instant;
 public class AuthController {
     private final AuthService authService;
     @PostMapping("/register")
-    public ResponseEntity<User> register(@RequestBody UserCreationDTO userCreationDTO){
+    public ResponseEntity<User> register(@Valid @RequestBody UserCreationDTO userCreationDTO){
         return new ResponseEntity<>(authService.register(userCreationDTO, Instant.now()), HttpStatus.OK);
     }
     @PostMapping("/login")

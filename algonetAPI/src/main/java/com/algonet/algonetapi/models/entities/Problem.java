@@ -8,6 +8,8 @@ import lombok.NonNull;
 import lombok.Setter;
 
 import java.time.Instant;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "problems")
@@ -38,11 +40,28 @@ public class Problem {
     @Column(nullable = false)
     private String restrictions;
     @Column(name = "created_at", nullable = false, updatable = false)
-    private Instant createdAt;
+    private Instant createdAt;    @OneToMany(mappedBy = "problem", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Solution> solutions;
 
-    @JsonProperty("authorId")
+    @OneToMany(mappedBy = "problem", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Test> tests;
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+        name = "problem_tags",
+        joinColumns = @JoinColumn(name = "problem_id"),
+        inverseJoinColumns = @JoinColumn(name = "tag_id")
+    )
+    private List<Tag> tags = new ArrayList<>();    @JsonProperty("authorId")
     private Integer getAuthorId(){
         return author.getId();
+    }
+
+    @PrePersist
+    protected void onCreate() {
+        if (createdAt == null) {
+            createdAt = Instant.now();
+        }
     }
 
     @Override

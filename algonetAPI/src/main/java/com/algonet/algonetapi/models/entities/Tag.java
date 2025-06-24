@@ -5,6 +5,9 @@ import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Table(name = "tags")
 @Getter
@@ -13,9 +16,14 @@ public class Tag {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
-    @NonNull
-    @Column(nullable = false)
+    @NonNull    @Column(nullable = false)
     private String name;
+
+    @ManyToMany(mappedBy = "tags", fetch = FetchType.LAZY)
+    private List<Problem> problems = new ArrayList<>();
+
+    @ManyToMany(mappedBy = "tags", fetch = FetchType.LAZY)
+    private List<User> users = new ArrayList<>();
 
     @Override
     public boolean equals(Object o) {

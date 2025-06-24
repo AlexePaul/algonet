@@ -3,7 +3,8 @@ package com.algonet.algonetapi.config;
 import com.algonet.algonetapi.annotations.GetAuthUser;
 import com.algonet.algonetapi.exceptions.UnauthorizedException;
 import com.algonet.algonetapi.models.entities.User;
-import lombok.NonNull;
+import org.springframework.lang.NonNull;
+import org.springframework.lang.Nullable;
 import org.springframework.core.MethodParameter;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -14,26 +15,30 @@ import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
 
 @Component
-public class GetAuthUserArgumentResolver implements HandlerMethodArgumentResolver {
-
+public class GetAuthUserArgumentResolver implements HandlerMethodArgumentResolver {    
     @Override
-    public boolean supportsParameter(MethodParameter parameter) {
+    public boolean supportsParameter(@NonNull MethodParameter parameter) {
         // Check if the parameter is annotated with @GetAuthUser and is of type User
         return parameter.hasParameterAnnotation(GetAuthUser.class) && parameter.getParameterType().equals(User.class);
-    }
-
-    @Override
+    }    @Override
     @NonNull
-    public Object resolveArgument(@NonNull MethodParameter parameter,@NonNull ModelAndViewContainer mavContainer,@NonNull NativeWebRequest webRequest,@NonNull WebDataBinderFactory binderFactory){
+    public Object resolveArgument(@NonNull MethodParameter parameter, @Nullable ModelAndViewContainer mavContainer, @NonNull NativeWebRequest webRequest, @Nullable WebDataBinderFactory binderFactory) {
         // Retrieve the current authentication
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-        // If authentication is not available, throw UnauthorizedException
-        if (authentication == null || !authentication.isAuthenticated()) {
+        // If authentication is not available or user is anonymous, throw UnauthorizedException
+        if (authentication == null || !authentication.isAuthenticated() || 
+            "anonymousUser".equals(authentication.getPrincipal())) {
+            throw new UnauthorizedException();
+        }
+
+        // Check if the principal is actually a User object
+        Object principal = authentication.getPrincipal();
+        if (!(principal instanceof User)) {
             throw new UnauthorizedException();
         }
 
         // Return the authenticated user
-        return authentication.getPrincipal();
+        return principal;
     }
 }

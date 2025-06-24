@@ -1,27 +1,32 @@
 package com.algonet.algonetapi.unit;
 
 import com.algonet.algonetapi.models.dto.ProblemRatingDTOs.ProblemRatingUpdateDTO;
-import com.algonet.algonetapi.models.entities.*;
-import com.algonet.algonetapi.repositories.ProblemRatingRepository;
+import com.algonet.algonetapi.models.entities.Problem;
+import com.algonet.algonetapi.models.entities.ProblemTagRating;
+import com.algonet.algonetapi.models.entities.Tag;
+import com.algonet.algonetapi.repositories.ProblemTagRatingRepository;
 import com.algonet.algonetapi.services.ProblemRatingService;
 import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.assertj.core.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
+@ExtendWith(MockitoExtension.class)
 class ProblemRatingServiceTest {
+
     @Mock
-    private ProblemRatingRepository problemRatingRepository;
+    private ProblemTagRatingRepository problemTagRatingRepository;
 
     @Mock
     private EntityManager entityManager;
@@ -29,117 +34,146 @@ class ProblemRatingServiceTest {
     @InjectMocks
     private ProblemRatingService problemRatingService;
 
+    private Problem testProblem;
+    private Tag testTag;
+    private ProblemTagRating testRating;
+    private ProblemRatingUpdateDTO updateDTO;
+
     @BeforeEach
     void setUp() {
-        MockitoAnnotations.openMocks(this);
+        testProblem = new Problem();
+        testProblem.setId(1);
+        testProblem.setTitle("Test Problem");
+        testProblem.setTags(new ArrayList<>());
 
+        testTag = new Tag();
+        testTag.setId(1);
+        testTag.setName("algorithms");
+
+        testRating = new ProblemTagRating();
+        testRating.setId(1);
+        testRating.setProblem(testProblem);
+        testRating.setTag(testTag);
+        testRating.setRating(85);
+
+        updateDTO = new ProblemRatingUpdateDTO();
+        updateDTO.setTagId(1);
+        updateDTO.setRating(90);
     }
 
     @Test
-    @DisplayName("Adding a rating to a problem successfully")
-    void addRatingToProblem() {
-        User user = new User();
-        user.setId(1);
+    void update_ShouldCreateNewRating_WhenRatingNotExists() {
+        // Given
+        when(entityManager.getReference(Problem.class, 1)).thenReturn(testProblem);
+        when(entityManager.getReference(Tag.class, 1)).thenReturn(testTag);
+        when(problemTagRatingRepository.findByProblemAndTag(testProblem, testTag)).thenReturn(Optional.empty());
+        when(problemTagRatingRepository.save(any(ProblemTagRating.class))).thenReturn(testRating);
 
-        ProblemRatingUpdateDTO problemRatingUpdateDTO = new ProblemRatingUpdateDTO(3,5);
+        // When
+        ProblemTagRating result = problemRatingService.update(1, 1, updateDTO);
 
-        Problem problem = new Problem();
-        problem.setId(2);
-        problem.setAuthor(user);
-
-        Tag tag = new Tag();
-        tag.setId(3);
-
-        ProblemRating problemRating = new ProblemRating();
-        problemRating.setProblem(problem);
-        problemRating.setTag(tag);
-        problemRating.setRating(5);
-        ProblemRatingId problemRatingId = new ProblemRatingId(user.getId(), problemRatingUpdateDTO.getTagId());
-        problemRating.setId(problemRatingId);
-
-        when(entityManager.getReference(Problem.class,2)).thenReturn(problem);
-        when(entityManager.getReference(Tag.class,problemRatingUpdateDTO.getTagId())).thenReturn(tag);
-        when(problemRatingRepository.findByProblemIdAndTagId(2, problemRatingUpdateDTO.getTagId())).thenReturn(Optional.empty());
-        when(problemRatingRepository.save(any(ProblemRating.class)))
-                .thenAnswer(invocation -> invocation.getArgument(0));
-
-        ProblemRating newProblemRating = problemRatingService.update(user.getId(),2, problemRatingUpdateDTO);
-
-        assertEquals(problemRating, newProblemRating);
-
-        verify(problemRatingRepository, times(1)).save(any());
-        verify(problemRatingRepository, times(1)).findByProblemIdAndTagId(any(), any());
-        verify(entityManager, times(2)).getReference(any(), any());
-    }
-    @Test
-    @DisplayName("Updating a rating to a problem successfully")
-    void updateRatingToProblem() {
-        User user = new User();
-        user.setId(1);
-
-        ProblemRatingUpdateDTO problemRatingUpdateDTO = new ProblemRatingUpdateDTO(3,5);
-
-        Problem problem = new Problem();
-        problem.setId(2);
-        problem.setAuthor(user);
-
-        Tag tag = new Tag();
-        tag.setId(3);
-
-        ProblemRating problemRating = new ProblemRating();
-        problemRating.setProblem(problem);
-        problemRating.setTag(tag);
-        problemRating.setRating(4);
-        ProblemRatingId problemRatingId = new ProblemRatingId(user.getId(), problemRatingUpdateDTO.getTagId());
-        problemRating.setId(problemRatingId);
-
-        when(entityManager.getReference(Problem.class,2)).thenReturn(problem);
-        when(entityManager.getReference(Tag.class,problemRatingUpdateDTO.getTagId())).thenReturn(tag);
-        when(problemRatingRepository.findByProblemIdAndTagId(2, problemRatingUpdateDTO.getTagId())).thenReturn(Optional.of(problemRating));
-        when(problemRatingRepository.save(any(ProblemRating.class)))
-                .thenAnswer(invocation -> invocation.getArgument(0));
-
-        ProblemRating newProblemRating = problemRatingService.update(user.getId(),2, problemRatingUpdateDTO);
-
-        assertEquals(problemRating, newProblemRating);
-        assertEquals(5, newProblemRating.getRating());
-
-
-        verify(problemRatingRepository, times(1)).save(any());
-        verify(problemRatingRepository, times(1)).findByProblemIdAndTagId(any(), any());
-        verify(entityManager, times(2)).getReference(any(), any());
+        // Then
+        assertThat(result).isNotNull();
+        verify(entityManager).getReference(Problem.class, 1);
+        verify(entityManager).getReference(Tag.class, 1);
+        verify(problemTagRatingRepository).findByProblemAndTag(testProblem, testTag);
+        verify(problemTagRatingRepository).save(any(ProblemTagRating.class));
+        assertThat(testProblem.getTags()).contains(testTag);
     }
 
     @Test
-    @DisplayName("Updating a rating to a problem unsuccessfully, missing fields")
-    void addRatingToProblemMissingFields() {
-        User user = new User();
-        user.setId(1);
+    void update_ShouldUpdateExistingRating_WhenRatingExists() {
+        // Given
+        when(entityManager.getReference(Problem.class, 1)).thenReturn(testProblem);
+        when(entityManager.getReference(Tag.class, 1)).thenReturn(testTag);
+        when(problemTagRatingRepository.findByProblemAndTag(testProblem, testTag)).thenReturn(Optional.of(testRating));
+        when(problemTagRatingRepository.save(any(ProblemTagRating.class))).thenReturn(testRating);
+        testProblem.getTags().add(testTag); // Tag already exists
 
-        // tagId is null
-        ProblemRatingUpdateDTO problemRatingUpdateDTOTID = new ProblemRatingUpdateDTO(null,5);
-        // rating is null
-        ProblemRatingUpdateDTO problemRatingUpdateDTOR = new ProblemRatingUpdateDTO(3,null);
+        // When
+        ProblemTagRating result = problemRatingService.update(1, 1, updateDTO);
 
-        assertThrows(IllegalArgumentException.class, () -> problemRatingService.update(user.getId(),2, problemRatingUpdateDTOTID));
-        assertThrows(IllegalArgumentException.class, () -> problemRatingService.update(user.getId(),2, problemRatingUpdateDTOR));
-
-        verify(problemRatingRepository, times(0)).save(any());
-        verify(problemRatingRepository, times(0)).findByProblemIdAndTagId(any(), any());
-        verify(entityManager, times(0)).getReference(any(), any());
+        // Then
+        assertThat(result).isNotNull();
+        verify(entityManager).getReference(Problem.class, 1);
+        verify(entityManager).getReference(Tag.class, 1);
+        verify(problemTagRatingRepository).findByProblemAndTag(testProblem, testTag);
+        verify(problemTagRatingRepository).save(testRating);
+        assertThat(testProblem.getTags()).hasSize(1);
     }
 
     @Test
-    @DisplayName("Getting all ratings of a problem")
-    void getRatingsOfProblem() {
-        ProblemRating problemRating = new ProblemRating();
-        problemRating.setRating(5);
+    void update_ShouldAddTagToProblem_WhenTagNotInProblemTags() {
+        // Given
+        when(entityManager.getReference(Problem.class, 1)).thenReturn(testProblem);
+        when(entityManager.getReference(Tag.class, 1)).thenReturn(testTag);
+        when(problemTagRatingRepository.findByProblemAndTag(testProblem, testTag)).thenReturn(Optional.of(testRating));
+        when(problemTagRatingRepository.save(any(ProblemTagRating.class))).thenReturn(testRating);
 
-        when(problemRatingRepository.findAllByProblemId(1)).thenReturn(java.util.List.of(problemRating));
+        // When
+        problemRatingService.update(1, 1, updateDTO);
 
-        assertEquals(1, problemRatingService.get(1).size());
-        assertEquals(5, problemRatingService.get(1).getFirst().getRating());
+        // Then
+        assertThat(testProblem.getTags()).contains(testTag);
+    }
 
-        verify(problemRatingRepository, times(2)).findAllByProblemId(1);
+    @Test
+    void update_ShouldThrowException_WhenRatingIsNull() {
+        // Given
+        updateDTO.setRating(null);
+
+        // When & Then
+        assertThatThrownBy(() -> problemRatingService.update(1, 1, updateDTO))
+                .isInstanceOf(IllegalArgumentException.class);
+
+        verify(entityManager, never()).getReference(any(), any());
+        verify(problemTagRatingRepository, never()).save(any());
+    }
+
+    @Test
+    void update_ShouldThrowException_WhenTagIdIsNull() {
+        // Given
+        updateDTO.setTagId(null);
+
+        // When & Then
+        assertThatThrownBy(() -> problemRatingService.update(1, 1, updateDTO))
+                .isInstanceOf(IllegalArgumentException.class);
+
+        verify(entityManager, never()).getReference(any(), any());
+        verify(problemTagRatingRepository, never()).save(any());
+    }
+
+    @Test
+    void get_ShouldReturnAllProblemRatings_WhenRatingsExist() {
+        // Given
+        List<ProblemTagRating> ratings = List.of(testRating);
+        when(entityManager.getReference(Problem.class, 1)).thenReturn(testProblem);
+        when(problemTagRatingRepository.findAllByProblem(testProblem)).thenReturn(ratings);
+
+        // When
+        List<ProblemTagRating> result = problemRatingService.get(1);
+
+        // Then
+        assertThat(result).isNotNull();
+        assertThat(result).hasSize(1);
+        assertThat(result).contains(testRating);
+        verify(entityManager).getReference(Problem.class, 1);
+        verify(problemTagRatingRepository).findAllByProblem(testProblem);
+    }
+
+    @Test
+    void get_ShouldReturnEmptyList_WhenNoRatingsExist() {
+        // Given
+        when(entityManager.getReference(Problem.class, 1)).thenReturn(testProblem);
+        when(problemTagRatingRepository.findAllByProblem(testProblem)).thenReturn(List.of());
+
+        // When
+        List<ProblemTagRating> result = problemRatingService.get(1);
+
+        // Then
+        assertThat(result).isNotNull();
+        assertThat(result).isEmpty();
+        verify(entityManager).getReference(Problem.class, 1);
+        verify(problemTagRatingRepository).findAllByProblem(testProblem);
     }
 }
