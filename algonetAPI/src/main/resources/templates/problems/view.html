@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" 
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      th:replace="~{layout :: layout(~{::title}, ~{::content})}">
+<head>
+    <title th:text="${problem?.title + ' - AlgoNet'}">Problem - AlgoNet</title>
+</head>
+<body>
+    <th:block th:fragment="content">
+        <div class="container my-5">
+            
+            <!-- Success/Error Messages -->
+            <div th:if="${success}" class="alert alert-success alert-dismissible fade show" role="alert">
+                <span th:text="${success}"></span>
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+            <div th:if="${error}" class="alert alert-danger alert-dismissible fade show" role="alert">
+                <span th:text="${error}"></span>
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+            
+            <div class="row">
+                <!-- Problem Details -->
+                <div class="col-lg-8">
+                    <div class="card">
+                        <div class="card-header">                            <div class="d-flex justify-content-between align-items-center">
+                                <h2 th:text="${problem.title}">Problem Title</h2>
+                                <span th:text="${problem.id}" class="badge fs-6 bg-primary">Problem</span>
+                            </div>
+                        </div>
+                        <div class="card-body">                            <div class="mb-4">
+                                <h5>Description</h5>
+                                <div th:text="${problem.body}">
+                                    Problem description goes here...
+                                </div>
+                            </div>
+
+                            <div class="mb-4">
+                                <h5>Restrictions</h5>
+                                <div th:text="${problem.restrictions}">
+                                    Problem restrictions...
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Solution Form for authenticated users -->
+                    <div class="card mt-3" sec:authorize="isAuthenticated()">
+                        <div class="card-header">
+                            <h5><i class="fas fa-code"></i> Submit Solution</h5>
+                        </div>
+                        <div class="card-body">
+                            <form th:action="@{/solutions}" method="post" id="solutionForm">
+                                <input type="hidden" name="problemId" th:value="${problem.id}"/>
+                                <div class="mb-3">
+                                    <label for="sourceCode" class="form-label">Source Code</label>
+                                    <textarea class="form-control" id="sourceCode" name="sourceCode" rows="15" 
+                                              placeholder="Write your solution here..." required></textarea>
+                                </div>
+                                <button type="submit" class="btn btn-success">
+                                    <i class="fas fa-play"></i> Submit Solution
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+
+                    <!-- Login prompt for unauthenticated users -->
+                    <div class="card mt-3" sec:authorize="!isAuthenticated()">
+                        <div class="card-body text-center">
+                            <h6>Want to solve this problem?</h6>
+                            <p class="text-muted">Login to submit your solution and track your progress.</p>
+                            <a th:href="@{/login}" class="btn btn-primary">Login</a>
+                            <a th:href="@{/signup}" class="btn btn-outline-primary">Sign Up</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Sidebar -->
+                <div class="col-lg-4">
+                    <!-- Problem Info -->
+                    <div class="card">
+                        <div class="card-header">
+                            <h6><i class="fas fa-info-circle"></i> Problem Information</h6>
+                        </div>
+                        <div class="card-body">
+                            <div class="row mb-2">
+                                <div class="col-sm-4"><strong>Author:</strong></div>
+                                <div class="col-sm-8" th:text="${problem.author?.username}">Author Name</div>
+                            </div>                            <div class="row mb-2">
+                                <div class="col-sm-4"><strong>Time Limit:</strong></div>
+                                <div class="col-sm-8" th:text="${problem.timeLimit + ' ms'}">1000 ms</div>
+                            </div>
+                            <div class="row mb-2">
+                                <div class="col-sm-4"><strong>Memory Limit:</strong></div>
+                                <div class="col-sm-8" th:text="${problem.memoryLimit + ' MB'}">128 MB</div>
+                            </div>
+                            <div class="row mb-2">
+                                <div class="col-sm-4"><strong>Created:</strong></div>
+                                <div class="col-sm-8" th:text="${#temporals.format(problem.createdAt, 'MMM dd, yyyy')}">Jan 01, 2024</div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-4"><strong>Tags:</strong></div>
+                                <div class="col-sm-8">
+                                    <span th:each="tag, iterStat : ${problem.tags}" 
+                                          th:class="'badge bg-secondary me-1 mb-1'"
+                                          th:text="${tag.name}">Tag</span>
+                                    <span th:if="${#lists.isEmpty(problem.tags)}" class="text-muted">No tags</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Previous Solutions (if any) -->
+                    <div class="card mt-3" th:if="${solutions != null and !#lists.isEmpty(solutions)}">
+                        <div class="card-header">
+                            <h6><i class="fas fa-history"></i> Your Solutions</h6>
+                        </div>
+                        <div class="card-body">
+                            <div th:each="solution : ${solutions}" class="mb-2 p-2 border rounded">
+                                <div class="d-flex justify-content-between">
+                                    <small th:text="${#temporals.format(solution.createdAt, 'MMM dd, yyyy HH:mm')}">Jan 01, 2024 10:30</small>
+                                    <span class="badge bg-info" th:text="${solution.status}">Submitted</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Stats -->
+                    <div class="card mt-3">
+                        <div class="card-header">
+                            <h6><i class="fas fa-chart-bar"></i> Statistics</h6>
+                        </div>
+                        <div class="card-body">
+                            <div class="text-center">
+                                <div class="row">
+                                    <div class="col">
+                                        <h4 class="text-success">0</h4>
+                                        <small class="text-muted">Accepted</small>
+                                    </div>
+                                    <div class="col">
+                                        <h4 class="text-primary">0</h4>
+                                        <small class="text-muted">Submissions</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </th:block>
+</body>
+</html>

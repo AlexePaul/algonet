@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:replace="~{layout :: layout(~{::title}, ~{::content})}">
+<head>
+    <title>Sign Up - AlgoNet</title>
+</head>
+<body>
+    <div th:fragment="content">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-md-6 col-lg-4">
+                    <div class="card mt-5">
+                        <div class="card-header">
+                            <h3 class="text-center">Join AlgoNet</h3>
+                        </div>
+                        <div class="card-body">                            <form th:action="@{/signup}" method="post" th:object="${signupForm}">
+                                <div class="mb-3">
+                                    <label for="username" class="form-label">Username</label>
+                                    <input type="text" class="form-control" id="username" th:field="*{username}" required>
+                                    <div th:if="${#fields.hasErrors('username')}" th:errors="*{username}" class="text-danger"></div>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="email" class="form-label">Email</label>
+                                    <input type="email" class="form-control" id="email" th:field="*{email}" required>
+                                    <div th:if="${#fields.hasErrors('email')}" th:errors="*{email}" class="text-danger"></div>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="password" class="form-label">Password</label>
+                                    <input type="password" class="form-control" id="password" th:field="*{password}" required>
+                                    <div th:if="${#fields.hasErrors('password')}" th:errors="*{password}" class="text-danger"></div>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="confirmPassword" class="form-label">Confirm Password</label>
+                                    <input type="password" class="form-control" id="confirmPassword" th:field="*{confirmPassword}" required>
+                                    <div th:if="${#fields.hasErrors('confirmPassword')}" th:errors="*{confirmPassword}" class="text-danger"></div>
+                                </div>
+                                <div class="mb-3 form-check">
+                                    <input type="checkbox" class="form-check-input" id="terms" name="terms" required>
+                                    <label class="form-check-label" for="terms">
+                                        I agree to the <a href="#">Terms of Service</a>
+                                    </label>
+                                </div>
+                                <div class="d-grid">
+                                    <button type="submit" class="btn btn-primary">Sign Up</button>
+                                </div>
+                            </form>
+                            
+                            <div class="text-center mt-3">
+                                <p>Already have an account? <a th:href="@{/login}">Login here</a></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>            </div>
+        </div>
+    </div>
+</body>
+</html>

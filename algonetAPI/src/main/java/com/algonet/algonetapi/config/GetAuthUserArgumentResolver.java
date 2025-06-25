@@ -1,7 +1,6 @@
 package com.algonet.algonetapi.config;
 
 import com.algonet.algonetapi.annotations.GetAuthUser;
-import com.algonet.algonetapi.exceptions.UnauthorizedException;
 import com.algonet.algonetapi.models.entities.User;
 import org.springframework.lang.NonNull;
 import org.springframework.lang.Nullable;
@@ -21,24 +20,29 @@ public class GetAuthUserArgumentResolver implements HandlerMethodArgumentResolve
         // Check if the parameter is annotated with @GetAuthUser and is of type User
         return parameter.hasParameterAnnotation(GetAuthUser.class) && parameter.getParameterType().equals(User.class);
     }    @Override
-    @NonNull
-    public Object resolveArgument(@NonNull MethodParameter parameter, @Nullable ModelAndViewContainer mavContainer, @NonNull NativeWebRequest webRequest, @Nullable WebDataBinderFactory binderFactory) {
+    @Nullable
+    public User resolveArgument(@NonNull MethodParameter parameter, @Nullable ModelAndViewContainer mavContainer, @NonNull NativeWebRequest webRequest, @Nullable WebDataBinderFactory binderFactory) {
         // Retrieve the current authentication
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-        // If authentication is not available or user is anonymous, throw UnauthorizedException
+        // If authentication is not available or user is anonymous, return null (allow nullable User)
         if (authentication == null || !authentication.isAuthenticated() || 
             "anonymousUser".equals(authentication.getPrincipal())) {
-            throw new UnauthorizedException();
+            return null;
         }
 
-        // Check if the principal is actually a User object
+        // Check if the principal is a CustomUserPrincipal object
         Object principal = authentication.getPrincipal();
-        if (!(principal instanceof User)) {
-            throw new UnauthorizedException();
+        if (principal instanceof CustomUserDetailsService.CustomUserPrincipal) {
+            return ((CustomUserDetailsService.CustomUserPrincipal) principal).getUser();
+        }
+        
+        // Fallback for direct User objects (should not happen with our setup)
+        if (principal instanceof User) {
+            return (User) principal;
         }
 
-        // Return the authenticated user
-        return principal;
+        // Return null if we can't resolve the user
+        return null;
     }
 }

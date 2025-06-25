@@ -13,7 +13,9 @@ import java.util.List;
 public class WebConfig implements WebMvcConfigurer {
 
     @Autowired
-    private GetAuthUserArgumentResolver getAuthUserArgumentResolver;    @Override
+    private GetAuthUserArgumentResolver getAuthUserArgumentResolver;
+
+    @Override
     public void addArgumentResolvers(@NonNull List<HandlerMethodArgumentResolver> resolvers) {
         // Register the custom argument resolver
         resolvers.add(getAuthUserArgumentResolver);

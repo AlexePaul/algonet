@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" 
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      th:replace="~{layout :: layout(~{::title}, ~{::content})}"
+<head>
+    <title>Create Problem - AlgoNet</title>
+</head>
+<body>
+    <th:block th:fragment="content">
+        <div class="container my-5">
+            <div class="row justify-content-center">
+                <div class="col-lg-8">
+                    <div class="card">
+                        <div class="card-header">
+                            <h2>Create New Problem</h2>
+                        </div>
+                        <div class="card-body">
+                            <form th:action="@{/problems/create}" method="post" th:object="${problemCreationDTO}">
+                                <div class="mb-3">
+                                    <label for="title" class="form-label">Title <span class="text-danger">*</span></label>
+                                    <input type="text" class="form-control" id="title" th:field="*{title}" required>
+                                    <div class="form-text">Give your problem a clear and descriptive title.</div>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="body" class="form-label">Description <span class="text-danger">*</span></label>
+                                    <textarea class="form-control" id="body" th:field="*{body}" rows="6" required
+                                              placeholder="Describe the problem clearly. Include the problem statement, constraints, and any necessary background information."></textarea>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="restrictions" class="form-label">Restrictions</label>
+                                    <textarea class="form-control" id="restrictions" th:field="*{restrictions}" rows="3"
+                                              placeholder="Any restrictions or constraints for this problem."></textarea>
+                                </div>
+
+                                <div class="row mb-3">
+                                    <div class="col-md-6">
+                                        <label for="timeLimit" class="form-label">Time Limit (ms) <span class="text-danger">*</span></label>
+                                        <input type="number" class="form-control" id="timeLimit" th:field="*{timeLimit}" 
+                                               value="1000" min="100" max="10000" required>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="memoryLimit" class="form-label">Memory Limit (MB) <span class="text-danger">*</span></label>
+                                        <input type="number" class="form-control" id="memoryLimit" th:field="*{memoryLimit}" 
+                                               value="128" min="16" max="512" required>
+                                    </div>
+                                </div>
+
+                                <div class="mb-4" th:if="${tags != null && !tags.isEmpty()}">>>>
+                                    <label class="form-label">Tags</label>
+                                    <div class="row">
+                                        <div class="col-md-3" th:each="tag : ${tags}">
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" th:value="${tag.id}" 
+                                                       th:id="'tag' + ${tag.id}" name="tagIds">
+                                                <label class="form-check-label" th:for="'tag' + ${tag.id}" th:text="${tag.name}">
+                                                    Tag Name
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="d-flex justify-content-between">
+                                    <a th:href="@{/problems}" class="btn btn-secondary">
+                                        <i class="fas fa-arrow-left"></i> Cancel
+                                    </a>
+                                    <button type="submit" class="btn btn-primary">
+                                        <i class="fas fa-save"></i> Create Problem
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>                </div>            </div>
+        </div>
+    </th:block>
+</body>
+</html>

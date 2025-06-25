@@ -35,22 +35,34 @@ public class ProblemService {
         Problem savedProblem = problemRepository.save(problem);
         log.info("Successfully created problem with id: {}", savedProblem.getId());
         return savedProblem;
-    }
-
-    public Problem get(Integer id) {
+    }    public Problem get(Integer id) {
         log.debug("Fetching problem with id: {}", id);
         return problemRepository.findById(id).orElseThrow(NotFoundException::new);
     }
-
-    public Page<Problem> getAllPaginated(Pageable pageable) {
+      public Problem getWithAuthor(Integer id) {
+        log.debug("Fetching problem with author and details with id: {}", id);
+        Problem problem = problemRepository.findByIdWithDetails(id);
+        if (problem == null) {
+            throw new NotFoundException();
+        }
+        return problem;
+    }public Page<Problem> getAllPaginated(Pageable pageable) {
         log.debug("Fetching problems with pagination: page={}, size={}", pageable.getPageNumber(), pageable.getPageSize());
         return problemRepository.findAllSorted(pageable);
     }
 
-    public Page<Problem> searchByTitle(String title, Pageable pageable) {
+    public Page<Problem> getAllPaginatedWithAuthor(Pageable pageable) {
+        log.debug("Fetching problems with authors with pagination: page={}, size={}", pageable.getPageNumber(), pageable.getPageSize());
+        return problemRepository.findAllSortedWithAuthor(pageable);
+    }    public Page<Problem> searchByTitle(String title, Pageable pageable) {
         log.debug("Searching problems by title: '{}' with pagination", title);
         return problemRepository.findByTitleContaining(title, pageable);
-    }    @CheckOwn(entity = Problem.class)
+    }
+
+    public Page<Problem> searchByTitleWithAuthor(String title, Pageable pageable) {
+        log.debug("Searching problems with authors by title: '{}' with pagination", title);
+        return problemRepository.findByTitleContainingWithAuthor(title, pageable);
+    }@CheckOwn(entity = Problem.class)
     public Problem update(Integer userId, Integer id, ProblemPatchDTO problemPatchDTO) {
         Problem problem = problemRepository.findById(id).orElseThrow(NotFoundException::new);
         copyNonNullProperties(problemPatchDTO, problem);

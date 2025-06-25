@@ -1,0 +1,2 @@
+// This SecurityConfig has been disabled and replaced by MvcSecurityConfig
+// to support both REST API and MVC web endpoints

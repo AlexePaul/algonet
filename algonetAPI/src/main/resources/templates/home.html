@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:replace="~{layout :: layout(~{::title}, ~{::content})}">
+<head>
+    <title>Home - AlgoNet</title>
+</head>
+<body>
+    <div th:fragment="content">
+        <!-- Hero Section -->
+        <section class="hero-section">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-8 mx-auto text-center">
+                        <h1 class="display-4 fw-bold">Welcome to AlgoNet</h1>
+                        <p class="lead mb-4">Practice algorithmic problems, improve your coding skills, and compete with others in a comprehensive coding platform.</p>
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-center">
+                            <a th:href="@{/problems}" class="btn btn-light btn-lg px-4 me-md-2">Browse Problems</a>
+                            <a th:href="@{/signup}" class="btn btn-outline-light btn-lg px-4">Get Started</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Features Section -->
+        <section class="py-5">
+            <div class="container">
+                <div class="row text-center">
+                    <div class="col-lg-4 mb-4">
+                        <div class="card h-100 border-0 shadow-sm">
+                            <div class="card-body">
+                                <div class="feature-icon bg-primary bg-gradient text-white rounded-3 mb-3 mx-auto" style="width: 4rem; height: 4rem; display: flex; align-items: center; justify-content: center;">
+                                    <i class="fas fa-code fa-2x"></i>
+                                </div>
+                                <h4 class="fw-bold">Code Practice</h4>
+                                <p class="text-muted">Practice with hundreds of algorithmic problems from beginner to advanced levels.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 mb-4">
+                        <div class="card h-100 border-0 shadow-sm">
+                            <div class="card-body">
+                                <div class="feature-icon bg-success bg-gradient text-white rounded-3 mb-3 mx-auto" style="width: 4rem; height: 4rem; display: flex; align-items: center; justify-content: center;">
+                                    <i class="fas fa-trophy fa-2x"></i>
+                                </div>
+                                <h4 class="fw-bold">Automated Grading</h4>
+                                <p class="text-muted">Get instant feedback on your solutions with our automated grading system.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 mb-4">
+                        <div class="card h-100 border-0 shadow-sm">
+                            <div class="card-body">
+                                <div class="feature-icon bg-info bg-gradient text-white rounded-3 mb-3 mx-auto" style="width: 4rem; height: 4rem; display: flex; align-items: center; justify-content: center;">
+                                    <i class="fas fa-users fa-2x"></i>
+                                </div>
+                                <h4 class="fw-bold">Community</h4>
+                                <p class="text-muted">Join a community of developers and share your solutions and strategies.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Recent Problems Section -->
+        <section class="py-5 bg-light" th:if="${problems != null && !problems.isEmpty()}">
+            <div class="container">
+                <div class="row">
+                    <div class="col-12">
+                        <h2 class="text-center mb-5">Recent Problems</h2>
+                        <div class="row">
+                            <div class="col-md-6 col-lg-4 mb-4" th:each="problem : ${problems}">
+                                <div class="card problem-card h-100">
+                                    <div class="card-body">                        <h5 class="card-title" th:text="${problem.title}">Problem Title</h5>
+                        <p class="card-text" th:text="${#strings.abbreviate(problem.body, 100)}">Problem description...</p>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <small class="text-muted">
+                                By: <span th:text="${problem.author?.username}" class="badge bg-secondary">Author</span>
+                            </small>
+                                            <a th:href="@{/problems/{id}(id=${problem.id})}" class="btn btn-primary btn-sm">View Problem</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="text-center mt-4">
+                            <a th:href="@{/problems}" class="btn btn-outline-primary">View All Problems</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Popular Tags Section -->
+        <section class="py-5" th:if="${tags != null && !tags.isEmpty()}">
+            <div class="container">
+                <h2 class="text-center mb-5">Popular Tags</h2>
+                <div class="text-center">
+                    <span th:each="tag : ${tags}" class="badge bg-light text-dark me-2 mb-2 p-2">
+                        <a th:href="@{/problems(tag=${tag.name})}" th:text="${tag.name}" class="text-decoration-none text-dark">Tag</a>
+                    </span>
+                </div>            </div>
+        </section>
+    </div>
+</body>
+</html>

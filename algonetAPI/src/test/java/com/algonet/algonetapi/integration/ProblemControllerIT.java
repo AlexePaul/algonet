@@ -26,7 +26,6 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.Instant;
 import java.util.Collections;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -77,6 +76,7 @@ class ProblemControllerIT {
         testProblem = problemRepository.save(testProblem);
     }
 
+    @SuppressWarnings("unused")
     private void setUpAuthentication() {
         Authentication auth = new UsernamePasswordAuthenticationToken(
             testUser, 
@@ -86,7 +86,8 @@ class ProblemControllerIT {
         SecurityContext securityContext = SecurityContextHolder.createEmptyContext();
         securityContext.setAuthentication(auth);
         SecurityContextHolder.setContext(securityContext);
-    }    @Test
+    }    
+    @Test
     @WithMockUser(username = "testuser")
     void getAllProblems_ShouldReturnProblems_WhenProblemsExist() throws Exception {
         mockMvc.perform(get("/api/v1/problems"))
